@@ -33,12 +33,12 @@ th, td{
 	border: 2px solid;
 	text-align: center;
 	padding: 10px;
-	border-color: #534608;
+	border-color: #6F5B00;
 }
 th{
 	border-top: 4px solid;
 	border-bottom: 4px solid;
-	border-color: #534608;
+	border-color: #6F5B00;
 	width: 42px;
 }
 th.levels{
@@ -61,4 +61,5 @@ a:link{
 }
 a:visited{
   color: #440066;
+
 }
