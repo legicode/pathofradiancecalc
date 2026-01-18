@@ -1,0 +1,65 @@
+<!doctype html> 
+<html lang="en"> 
+	<head>
+		<meta charset="utf-8"> 
+		<title>Path of Radiance stats calculator</title> 
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+
+	<body>
+		<table id="main">
+			<tr><td class="intro">
+				<b>Average stats calculator for <u>Fire Emblem: Path of Radiance</u>.</b><br /><br />
+				Developed by <a href="https://bsky.app/profile/homestar.bsky.social">legi</a>. Feel free to message suggestions or ideas. More games in development!
+			</td></tr>
+
+			<tr><td class="calculator">
+				<h2>True hit calculator</h2>
+				Displayed hit rate: 
+				<select id="displayedHit" onChange="updateHit()"></select> &nbsp&nbsp
+				True hit rate: <b><span id="trueHit"></span></b><br/>
+			</td></tr>
+
+			<tr><td class="table1">
+				<h2>Average stats</h2>
+				<b>Character:</b> <select id="charAverage" onChange="updateAverageTable()"></select> &nbsp&nbsp
+				<b>Promotion level:</b> <select id="promoLevelAverage" onChange="updateAverageTable()"></select> &nbsp&nbsp
+				<b>Beasts:</b> <select id="transformation" onChange="updateAverageTable()">
+					<option value="base">Base</option>
+					<option value="transformed" selected>Transformed</option>
+					<option value="demiband">Demi Band</option>
+				</select><br /><br />
+				<table class="statstable" id="averageGrowths">
+					<tr>
+						<th class="levels">Level</th>
+						<th>HP</th>
+						<th>Str</th>
+						<th>Mag</th>
+						<th>Skl</th>
+						<th>Spd</th>
+						<th>Lck</th>
+						<th>Def</th>
+						<th>Res</th>
+						<th class="conmov">Con</th>
+						<th class="conmov">Mov</th>
+					</tr>
+					<tr>
+						<th class="levels">Level</th>
+						<th>HP</th>
+						<th>Str</th>
+						<th>Mag</th>
+						<th>Skl</th>
+						<th>Spd</th>
+						<th>Lck</th>
+						<th>Def</th>
+						<th>Res</th>
+						<th class="conmov">Con</th>
+						<th class="conmov">Mov</th>
+					</tr>
+				</table>
+			</td></tr>
+
+		</table>
+		<script src="data.js"></script>
+	</body>
+</html>
