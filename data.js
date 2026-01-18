@@ -337,6 +337,20 @@ function updateHit(){
 	trueHit.innerHTML = trueHitRate;
 }
 
+function updateCharAverage(){
+	if (charAverage.value != "Ike"){
+		while(promoLevelAverage.options.length > 11){
+			promoLevelAverage.remove(11);
+		}
+	}
+	else{
+		for (let i = 9; i >= 1; i--) {
+			promoLevelAverage.options[20-i] = new Option(i);
+		}
+	}
+	updateAverageTable();
+}
+
 function updateAverageTable(){
 	char = charAverage.value;
 	if (char.includes("'")) {
@@ -526,14 +540,9 @@ var promoLevelAverage = document.getElementById("promoLevelAverage");
 var transformation = document.getElementById("transformation");
 transformation.selectedIndex = 0;
 for (let i = 0; i < characters.length; i++) {
-	if (characters[i] == "LArachel"){
-		charAverage.options[i] = new Option("L'Arachel");
-	}
-	else {
-		charAverage.options[i] = new Option(characters[i]);
-	}
+	charAverage.options[i] = new Option(characters[i]);
 }
-for (let i = 20; i >= 10; i--) {
+for (let i = 20; i >= 1; i--) {
 	promoLevelAverage.options[20-i] = new Option(i);
 }
 updateAverageTable();
