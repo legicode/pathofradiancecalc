@@ -342,6 +342,14 @@ function updateCharAverage(){
 			promoLevelAverage.options[20-i] = new Option(i);
 		}
 	}
+	if (charAverage.value == "Reyson"){
+		if(transformation.options.length > 2){
+			transformation.remove(2);
+		}
+	}
+	else{
+		transformation.options[2] = new Option("Demi Band");
+	}
 	updateAverageTable();
 }
 
@@ -379,10 +387,10 @@ function updateAverageTable(){
 	mov.innerHTML = "<span id=\"aBaseMOV\"></span>";
 	for (let i = 0; i < 10; i++){
 		let stat = charBases.get(char)[i+1];
-		if (promotions.get(char) == "B" && transformation.value == "transformed"){
+		if (promotions.get(char) == "B" && transformation.value == "Transformed"){
 			stat += transformations.get(char)[i];
 		}
-		else if (promotions.get(char) == "B" && transformation.value == "demiband" && char != "Reyson"){
+		else if (promotions.get(char) == "B" && transformation.value == "Demi Band"){
 			stat += Math.ceil(transformations.get(char)[i] / 2);
 		}
 		this["aBase"+(stats[i])].innerHTML = stat;
@@ -505,10 +513,10 @@ function updateAverageTable(){
 				this["current"+stats[j]] = promotedCaps.get(char)[j];
 			}
 			let stat = this["current"+stats[j]];
-			if (promotions.get(char) == "B" && transformation.value == "transformed"){
+			if (promotions.get(char) == "B" && transformation.value == "Transformed"){
 				stat += transformations.get(char)[j];
 			}
-			else if (promotions.get(char) == "B" && transformation.value == "demiband" && char != "Reyson"){
+			else if (promotions.get(char) == "B" && transformation.value == "Demi Band"){
 				stat += Math.ceil(transformations.get(char)[j] / 2);
 			}
 			if (this["current"+stats[j]] == promotedCaps.get(char)[j]){
