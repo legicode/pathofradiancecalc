@@ -331,6 +331,30 @@ function updateHit(){
 	trueHit.innerHTML = trueHitRate;
 }
 
+function updateEXP(){
+	let levelDifference = enemyLevel.value - unitLevel.value;
+	let bonus = 25 - difficulty.selectedIndex * 5;
+	if (difficulty.selectedIndex == 0){
+		bonus += 5;
+	}
+	let expGain = Math.floor((21 + levelDifference) / 2);
+	if (difficulty.selectedIndex == 0){
+		expGain += 5;
+	}
+	expGain = Math.max(expGain, 1);
+	if (killEXP.checked){
+		expGain += levelDifference + bonus + bossEXP.checked * (bonus + 10) + thiefEXP.checked * 20;
+	}
+	if (expGrowth.selectedIndex == 1){
+		expGain = Math.floor(expGain * 2 / 3);
+	}
+	else if (expGrowth.selectedIndex == 2){
+		expGain *= 2;
+	}
+	expGain = Math.min(expGain, 100);
+	exp.innerHTML = expGain + " EXP";
+}
+
 function updateCharAverage(){
 	if (charAverage.value != "Ike"){
 		while(promoLevelAverage.options.length > 11){
@@ -536,6 +560,27 @@ for (let i = 0; i <= 100; i++){
 }
 displayedHit.selectedIndex = 25;
 updateHit();
+
+var unitLevel = document.getElementById("unitLevel");
+var enemyLevel = document.getElementById("enemyLevel");
+var killEXP = document.getElementById("killEXP");
+var bossEXP = document.getElementById("bossEXP");
+var thiefEXP = document.getElementById("thiefEXP");
+var expGrowth = document.getElementById("expGrowth");
+var difficulty = document.getElementById("difficulty");
+var experience = document.getElementById("experience");
+for (let i = 0; i < 40; i++){
+	unitLevel.options[i] = new Option(40-i);
+	enemyLevel.options[i] = new Option(40-i);
+}
+unitLevel.selectedIndex = 20;
+enemyLevel.selectedIndex = 20;
+killEXP.checked = true;
+bossEXP.checked = false;
+thiefEXP.checked = false;
+expGrowth.selectedIndex = 0;
+difficulty.selectedIndex = 2;
+updateEXP();
 
 var charAverage = document.getElementById("charAverage");
 var promoLevelAverage = document.getElementById("promoLevelAverage");

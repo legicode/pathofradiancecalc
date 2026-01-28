@@ -20,6 +20,29 @@
 				True hit rate: <b><span id="trueHit"></span></b><br/>
 			</td></tr>
 
+			<tr><td class="calculator">
+				<h2>EXP calculator</h2>
+				Unit level: 
+				<select id="unitLevel" onChange="updateEXP()"></select> &nbsp&nbsp
+				Enemy level: 
+				<select id="enemyLevel" onChange="updateEXP()"></select><br/><br/> &nbsp
+				Enemy killed: <input type="checkbox" id="killEXP" onChange="updateEXP()"> &nbsp
+				Boss: <input type="checkbox" id="bossEXP" onChange="updateEXP()"> &nbsp 
+				Thief: <input type="checkbox" id="thiefEXP" onChange="updateEXP()"> &nbsp 
+				Skills: <select id="expGrowth" onChange="updateEXP()">
+					<option value="base">Base</option>
+					<option value="blossom">Blossom</option>
+					<option value="paragon">Paragon</option>
+				</select> &nbsp
+				Difficulty: <select id="difficulty" onChange="updateEXP()">
+					<option value="easy">Easy</option>
+					<option value="normal">Normal</option>
+					<option value="hard">Hard</option>
+					<option value="maniac">Maniac</option>
+				</select><br /><br />
+				Experience: <b><span id="exp"></span></b><br/>
+			</td></tr>
+
 			<tr><td class="table1">
 				<h2>Average stats</h2>
 				<b>Character:</b> <select id="charAverage" onChange="updateCharAverage()"></select> &nbsp&nbsp
