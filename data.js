@@ -343,7 +343,7 @@ function updateEXP(){
 	}
 	expGain = Math.max(expGain, 1);
 	if (killEXP.checked){
-		expGain += levelDifference + bonus + bossEXP.checked * (bonus + 10) + thiefEXP.checked * 20;
+		expGain += Math.max(levelDifference + bonus + bossEXP.checked * (bonus + 10) + thiefEXP.checked * 20, 0);
 	}
 	if (expGrowth.selectedIndex == 1){
 		expGain = Math.floor(expGain * 2 / 3);
