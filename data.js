@@ -332,7 +332,7 @@ function updateHit(){
 }
 
 function updateEXP(){
-	let levelDifference = enemyLevel.value - unitLevel.value;
+	let levelDifference = enemyLevel.value - playerLevel.value;
 	let bonus = 25 - difficulty.selectedIndex * 5;
 	if (difficulty.selectedIndex == 0){
 		bonus += 5;
@@ -561,19 +561,19 @@ for (let i = 0; i <= 100; i++){
 displayedHit.selectedIndex = 25;
 updateHit();
 
-var unitLevel = document.getElementById("unitLevel");
+var playerLevel = document.getElementById("playerLevel");
 var enemyLevel = document.getElementById("enemyLevel");
 var killEXP = document.getElementById("killEXP");
 var bossEXP = document.getElementById("bossEXP");
 var thiefEXP = document.getElementById("thiefEXP");
 var expGrowth = document.getElementById("expGrowth");
 var difficulty = document.getElementById("difficulty");
-var experience = document.getElementById("experience");
+var exp = document.getElementById("exp");
 for (let i = 0; i < 40; i++){
-	unitLevel.options[i] = new Option(40-i);
+	playerLevel.options[i] = new Option(40-i);
 	enemyLevel.options[i] = new Option(40-i);
 }
-unitLevel.selectedIndex = 20;
+playerLevel.selectedIndex = 20;
 enemyLevel.selectedIndex = 20;
 killEXP.checked = true;
 bossEXP.checked = false;
