@@ -1,323 +1,431 @@
-const stats = ["HP", "STR", "MAG", "SKL", "SPD", "LCK", "DEF", "RES", "CON", "MOV"];
-const statsfull = ["HP", "Strength", "Magic", "Skill", "Speed", "Luck", "Defense", "Resistance", "Constitution", "Movement"];
+const stats = ["HP", "ATK", "SKL", "SPD", "LCK", "DEF", "RES", "CON", "MOV"];
+const statsfull = ["HP", "Attack", "Skill", "Speed", "Luck", "Defense", "Resistance", "Constitution", "Movement"];
 
-const characters = ["Ike", "Titania", "Oscar", "Boyd", "Rhys", "Shinon", "Gatrie", "Soren", "Mia", "Ilyana", "Mist", "Rolf", "Marcia", "Lethe", "Mordecai", "Volke", "Kieran", "Brom", "Nephenee", "Zihark", "Sothe (Base)", "Sothe (Bl+Rand)", "Sothe (Bl+Fix)",
-	"Jill", "Astrid", "Makalov", "Tormod", "Muarim", "Stefan", "Devdan", "Tanith", "Reyson", "Janaff", "Ulki", "Calill", "Tauroneo", "Ranulf", "Haar", "Bastian", "Lucia", "Geoffrey", "Largo", "Elincia", "Nasir", "Ena", "Tibarn", "Naesala", "Giffca"];
+const characters = ["Eirika", "Seth", "Franz", "Gilliam", "Vanessa", "Moulder", "Ross", "Garcia", "Neimi", "Colm", "Artur", "Lute", "Natasha", "Joshua", "Ephraim", "Forde", "Kyle", "Orson (5x)", 
+	"Tana", "Amelia", "Amelia (late)", "Innes (Eir)", "Innes (Eph)", "Gerik", "Tethys", "Marisa", "LArachel", "Dozla", "Saleh (Eir)", "Saleh (Eph)", "Ewan", "Cormag (Eph)", "Cormag (Eir)", 
+	"Rennac", "Duessel (Eph)", "Duessel (Eir)", "Knoll", "Myrrh", "Syrene", "Caellach", "Orson (CC)", "Riev", "Ismaire", "Selena", "Glen", "Hayden", "Valter", "Fado", "Lyon"];
 
 const charGrowths = new Map([
-	["Ike", 		[75, 50, 20, 50, 55, 35, 40, 40, 0, 0]],
-	["Titania", 	[80, 45, 25, 60, 50, 45, 40, 45, 0, 0]],
-	["Oscar", 		[55, 45, 20, 50, 45, 30, 35, 30, 0, 0]],
-	["Boyd", 		[75, 60,  5, 50, 45, 35, 25, 25, 0, 0]],
-	["Rhys", 		[40,  4, 60, 50, 40, 50, 25, 55, 0, 0]],
-	["Shinon",		[75, 65, 20, 70, 65, 35, 50, 40, 0, 0]],
-	["Gatrie", 		[80, 55,  5, 55, 25, 25, 60, 30, 0, 0]],
-	["Soren", 		[45,  5, 60, 55, 40, 30, 15, 55, 0, 0]],
-	["Mia", 		[50, 40, 30, 45, 60, 45, 20, 25, 0, 0]],
-	["Ilyana", 		[45, 25, 50, 45, 30, 45, 15, 50, 0, 0]],
-	["Mist", 		[50, 35, 50, 25, 40, 60, 15, 40, 0, 0]],
-	["Rolf", 		[60, 40, 20, 45, 50, 40, 30, 25, 0, 0]],
-	["Marcia", 		[55, 40, 20, 50, 55, 40, 25, 30, 0, 0]],
-	["Lethe", 		[130,50,  5, 65, 70, 50, 40, 25, 0, 0]],
-	["Mordecai", 	[150,65,  0, 55, 50, 40, 40, 20, 0, 0]],
-	["Volke", 		[65, 50,  0, 55, 50, 40, 40, 20, 0, 0]],
-	["Kieran", 		[60, 50, 15, 50, 40, 25, 40, 30, 0, 0]],
-	["Brom", 		[75, 45, 10, 50, 25, 20, 55, 25, 0, 0]],
-	["Nephenee", 	[55, 40, 20, 55, 55, 25, 35, 25, 0, 0]],
-	["Zihark", 		[55, 45, 15, 50, 60, 40, 30, 20, 0, 0]],
-	["Sothe (Base)", 	[60,    55,    10,    70,    65,    55,    35,    30,    0, 0]],
-	["Sothe (Bl+Rand)", [84,    79.75, 19,    91,    87.75, 79.75, 57.75, 51,    0, 0]],
-	["Sothe (Bl+Fix)", 	[600/9, 550/9, 100/9, 700/9, 650/9, 550/9, 350/9, 300/9, 0, 0]],
-	["Jill", 		[60, 40, 30, 45, 45, 25, 35, 30, 0, 0]],
-	["Astrid", 		[45, 40, 20, 55, 50, 40, 30, 25, 0, 0]],
-	["Makalov", 	[60, 55,  5, 45, 50, 25, 45, 20, 0, 0]],
-	["Tormod", 		[50, 20, 45, 40, 45, 35, 25, 45, 0, 0]],
-	["Muarim", 		[145,70,  5, 70, 55, 35, 60, 45, 0, 0]],
-	["Stefan", 		[70, 50, 20, 40, 55, 25, 35, 30, 0, 0]],
-	["Devdan", 		[75, 60, 30, 40, 35, 40, 45, 25, 0, 0]],
-	["Tanith", 		[60, 40, 35, 70, 40, 30, 25, 30, 0, 0]],
-	["Reyson", 		[65,  5, 40, 50, 50, 60, 15, 50, 0, 0]],
-	["Janaff", 		[130,55, 10, 70, 65, 40, 30, 25, 0, 0]],
-	["Ulki", 		[140,60, 10, 65, 60, 35, 35, 25, 0, 0]],
-	["Calill", 		[50, 25, 45, 45, 45, 30, 40, 35, 0, 0]],
-	["Tauroneo", 	[60, 55,  5, 50, 30, 15, 60, 40, 0, 0]],
-	["Ranulf", 		[130,50,  0, 55, 55, 35, 35, 20, 0, 0]],
-	["Haar", 		[65, 60,  5, 60, 35, 15, 45, 20, 0, 0]],
-	["Bastian", 	[55, 40, 65, 65, 55, 30, 35, 50, 0, 0]],
-	["Lucia", 		[70, 50, 30, 70, 65, 50, 40, 40, 0, 0]],
-	["Geoffrey", 	[65, 50, 25, 55, 55, 20, 45, 45, 0, 0]],
-	["Largo", 		[80, 70,  5, 45, 45, 30, 25, 20, 0, 0]],
-	["Elincia", 	[60, 30, 80, 45, 40, 60, 25, 35, 0, 0]],
-	["Nasir", 		[150,50, 10, 55, 45, 35, 60, 25, 0, 0]],
-	["Ena", 		[145,35,  5, 50, 60, 40, 40, 30, 0, 0]],
-	["Tibarn", 		[145,70,  5, 70, 65, 50, 60, 25, 0, 0]],
-	["Naesala", 	[135,60, 40, 70, 75, 20, 55, 35, 0, 0]],
-	["Giffca", 		[160,75,  5, 70, 60, 40, 50, 30, 0, 0]]
+	["Eirika", 			[70, 40, 60, 60, 60, 30, 30, 0, 0]],
+	["Seth", 			[90, 50, 45, 45, 25, 40, 30, 0, 0]],
+	["Franz", 			[80, 40, 40, 50, 40, 25, 20, 0, 0]],
+	["Gilliam", 		[90, 45, 35, 30, 30, 55, 20, 0, 0]],
+	["Vanessa", 		[50, 35, 55, 60, 50, 20, 30, 0, 0]],
+	["Moulder",			[70, 40, 50, 40, 20, 25, 25, 0, 0]],
+	["Ross", 			[70, 50, 35, 30, 40, 25, 20, 0, 0]],
+	["Garcia", 			[80, 65, 40, 20, 40, 25, 15, 0, 0]],
+	["Neimi", 			[55, 45, 50, 60, 50, 15, 35, 0, 0]],
+	["Colm", 			[75, 40, 40, 65, 45, 25, 20, 0, 0]],
+	["Artur", 			[55, 50, 50, 40, 25, 15, 55, 0, 0]],
+	["Lute", 			[45, 65, 30, 45, 45, 15, 40, 0, 0]],
+	["Natasha", 		[50, 60, 25, 40, 60, 15, 55, 0, 0]],
+	["Joshua", 			[80, 35, 55, 55, 30, 20, 20, 0, 0]],
+	["Ephraim", 		[80, 55, 55, 45, 50, 35, 25, 0, 0]],
+	["Forde", 			[85, 40, 50, 45, 35, 20, 25, 0, 0]],
+	["Kyle", 			[90, 50, 40, 40, 20, 25, 20, 0, 0]],
+	["Orson (5x)", 		[80, 55, 45, 40, 25, 45, 30, 0, 0]],
+	["Tana", 			[65, 45, 40, 65, 60, 20, 25, 0, 0]],
+	["Amelia", 			[60, 35, 40, 40, 50, 30, 15, 0, 0]],
+	["Amelia (late)", 	[60, 35, 40, 40, 50, 30, 15, 0, 0]],
+	["Innes (Eir)", 	[75, 40, 40, 45, 45, 20, 25, 0, 0]],
+	["Innes (Eph)", 	[75, 40, 40, 45, 45, 20, 25, 0, 0]],
+	["Gerik", 			[90, 45, 40, 30, 30, 35, 25, 0, 0]],
+	["Tethys", 			[85,  5, 10, 70, 80, 30, 75, 0, 0]],
+	["Marisa", 			[75, 30, 55, 60, 50, 15, 25, 0, 0]],
+	["LArachel", 		[45, 50, 45, 45, 65, 15, 50, 0, 0]],
+	["Dozla", 			[85, 50, 35, 40, 30, 30, 25, 0, 0]],
+	["Saleh (Eir)", 	[50, 30, 25, 40, 40, 30, 35, 0, 0]],
+	["Saleh (Eph)", 	[50, 30, 25, 40, 40, 30, 35, 0, 0]],
+	["Ewan", 			[50, 45, 40, 35, 50, 15, 40, 0, 0]],
+	["Cormag (Eph)", 	[85, 55, 40, 45, 35, 25, 15, 0, 0]],
+	["Cormag (Eir)", 	[85, 55, 40, 45, 35, 25, 15, 0, 0]],
+	["Rennac", 			[65, 25, 45, 60, 25, 25, 30, 0, 0]],
+	["Duessel (Eph)", 	[85, 55, 40, 30, 20, 45, 30, 0, 0]],
+	["Duessel (Eir)", 	[85, 55, 40, 30, 20, 45, 30, 0, 0]],
+	["Knoll", 			[70, 50, 40, 35, 20, 10, 45, 0, 0]],
+	["Myrrh", 			[130,90, 85, 65, 40, 150,30, 0, 0]],
+	["Syrene", 			[70, 40, 50, 60, 30, 20, 50, 0, 0]],
+	["Caellach", 		[85, 50, 45, 45, 20, 30, 20, 0, 0]],
+	["Orson (CC)", 		[80, 55, 45, 40, 25, 45, 30, 0, 0]],
+	["Riev", 			[75, 45, 50, 40, 15, 20, 45, 0, 0]],
+	["Ismaire", 		[75, 30, 60, 55, 30, 20, 25, 0, 0]],
+	["Selena", 			[85, 40, 55, 40, 25, 20, 30, 0, 0]],
+	["Glen", 			[85, 45, 50, 45, 20, 35, 40, 0, 0]],
+	["Hayden", 			[70, 40, 45, 45, 40, 25, 25, 0, 0]],
+	["Valter", 			[80, 40, 55, 50, 15, 20, 20, 0, 0]],
+	["Fado", 			[85, 55, 40, 30, 25, 45, 25, 0, 0]],
+	["Lyon", 			[85, 50, 55, 55, 30, 45, 55, 0, 0]]
 ]);
 
 const genders = new Map([
-	["Ike", 		"M"],
-	["Titania", 	"F"],
-	["Oscar", 		"M"],
-	["Boyd", 		"M"],
-	["Rhys", 		"M"],
-	["Shinon",		"M"],
-	["Gatrie", 		"M"],
-	["Soren", 		"M"],
-	["Mia", 		"F"],
-	["Ilyana", 		"F"],
-	["Mist", 		"F"],
-	["Rolf", 		"M"],
-	["Marcia", 		"F"],
-	["Lethe", 		"F"],
-	["Mordecai", 	"M"],
-	["Volke", 		"M"],
-	["Kieran", 		"M"],
-	["Brom", 		"M"],
-	["Nephenee", 	"F"],
-	["Zihark", 		"M"],
-	["Sothe", 		"M"],
-	["Jill", 		"F"],
-	["Astrid", 		"F"],
-	["Makalov", 	"M"],
-	["Tormod", 		"M"],
-	["Muarim", 		"M"],
-	["Stefan", 		"M"],
-	["Devdan", 		"M"],
-	["Tanith", 		"F"],
-	["Reyson", 		"M"],
-	["Janaff", 		"M"],
-	["Ulki", 		"M"],
-	["Calill", 		"F"],
-	["Tauroneo", 	"M"],
-	["Ranulf", 		"M"],
-	["Haar", 		"M"],
-	["Bastian", 	"M"],
-	["Lucia", 		"F"],
-	["Geoffrey", 	"M"],
-	["Largo", 		"M"],
-	["Elincia", 	"F"],
-	["Nasir", 		"M"],
-	["Ena", 		"F"],
-	["Tibarn", 		"M"],
-	["Naesala", 	"M"],
-	["Giffca", 		"M"]
+	["Eirika", 			"F"],
+	["Seth", 			"M"],
+	["Franz", 			"M"],
+	["Gilliam", 		"M"],
+	["Vanessa", 		"F"],
+	["Moulder",			"M"],
+	["Ross", 			"M"],
+	["Garcia", 			"M"],
+	["Neimi", 			"F"],
+	["Colm", 			"M"],
+	["Artur", 			"M"],
+	["Lute", 			"F"],
+	["Natasha", 		"F"],
+	["Joshua", 			"M"],
+	["Ephraim", 		"M"],
+	["Forde", 			"M"],
+	["Kyle", 			"M"],
+	["Orson (5x)",		"M"],
+	["Tana", 			"F"],
+	["Amelia", 			"F"],
+	["Amelia (late)", 	"F"],
+	["Innes (Eir)", 	"M"],
+	["Innes (Eph)", 	"M"],
+	["Gerik", 			"M"],
+	["Tethys", 			"F"],
+	["Marisa", 			"F"],
+	["LArachel", 		"F"],
+	["Dozla", 			"M"],
+	["Saleh (Eir)", 	"M"],
+	["Saleh (Eph)", 	"M"],
+	["Ewan", 			"M"],
+	["Cormag (Eph)", 	"M"],
+	["Cormag (Eir)", 	"M"],
+	["Rennac", 			"M"],
+	["Duessel (Eph)", 	"M"],
+	["Duessel (Eir)", 	"M"],
+	["Knoll", 			"M"],
+	["Myrrh", 			"F"],
+	["Syrene", 			"F"],
+	["Caellach", 		"M"],
+	["Orson (CC)",		"M"],
+	["Riev", 			"M"],
+	["Ismaire", 		"F"],
+	["Selena", 			"F"],
+	["Glen", 			"M"],
+	["Hayden", 			"M"],
+	["Valter", 			"M"],
+	["Fado", 			"M"],
+	["Lyon", 			"M"]
 ]);
 
 const promotions = new Map([
-	["Ike", 			"N"],
-	["Titania", 		"P"],
-	["Oscar", 			"N"],
-	["Boyd", 			"N"],
-	["Rhys", 			"N"],
-	["Shinon",			"P"],
-	["Gatrie", 			"N"],
-	["Soren", 			"N"],
-	["Mia", 			"N"],
-	["Ilyana", 			"N"],
-	["Mist", 			"N"],
-	["Rolf", 			"N"],
-	["Marcia", 			"N"],
-	["Lethe", 			"B"],
-	["Mordecai", 		"B"],
-	["Volke", 			"N"],
-	["Kieran", 			"N"],
-	["Brom", 			"N"],
-	["Nephenee", 		"N"],
-	["Zihark", 			"N"],
-	["Sothe (Base)", 	"P"],
-	["Sothe (Bl+Rand)", "P"],
-	["Sothe (Bl+Fix)", 	"P"],
-	["Jill", 			"N"],
-	["Astrid", 			"N"],
-	["Makalov", 		"N"],
-	["Tormod", 			"N"],
-	["Muarim", 			"B"],
-	["Stefan", 			"P"],
-	["Devdan", 			"P"],
-	["Tanith", 			"P"],
-	["Reyson", 			"B"],
-	["Janaff", 			"B"],
-	["Ulki", 			"B"],
-	["Calill", 			"P"],
-	["Tauroneo", 		"P"],
-	["Ranulf", 			"B"],
-	["Haar", 			"P"],
-	["Bastian", 		"P"],
-	["Lucia", 			"P"],
-	["Geoffrey", 		"P"],
-	["Largo", 			"P"],
-	["Elincia", 		"P"],
-	["Nasir", 			"B"],
-	["Ena", 			"B"],
-	["Tibarn", 			"B"],
-	["Naesala", 		"B"],
-	["Giffca", 			"B"]
+	["Eirika", 			"N"],
+	["Seth", 			"P"],
+	["Franz", 			"N"],
+	["Gilliam", 		"N"],
+	["Vanessa", 		"N"],
+	["Moulder",			"N"],
+	["Ross", 			"T"],
+	["Garcia", 			"N"],
+	["Neimi", 			"N"],
+	["Colm", 			"N"],
+	["Artur", 			"N"],
+	["Lute", 			"N"],
+	["Natasha", 		"N"],
+	["Joshua", 			"N"],
+	["Ephraim", 		"N"],
+	["Forde", 			"N"],
+	["Kyle", 			"N"],
+	["Orson (5x)", 		"P"],
+	["Tana", 			"N"],
+	["Amelia", 			"T"],
+	["Amelia (late)", 	"T"],
+	["Innes (Eir)", 	"P"],
+	["Innes (Eph)", 	"P"],
+	["Gerik", 			"N"],
+	["Tethys", 			"D"],
+	["Marisa", 			"N"],
+	["LArachel", 		"N"],
+	["Dozla", 			"P"],
+	["Saleh (Eir)", 	"P"],
+	["Saleh (Eph)", 	"P"],
+	["Ewan", 			"T"],
+	["Cormag (Eph)", 	"N"],
+	["Cormag (Eir)", 	"N"],
+	["Rennac", 			"P"],
+	["Duessel (Eph)", 	"P"],
+	["Duessel (Eir)", 	"P"],
+	["Knoll", 			"N"],
+	["Myrrh", 			"M"],
+	["Syrene", 			"P"],
+	["Caellach", 		"P"],
+	["Orson (CC)",		"P"],
+	["Riev", 			"P"],
+	["Ismaire", 		"P"],
+	["Selena", 			"P"],
+	["Glen", 			"P"],
+	["Hayden", 			"P"],
+	["Valter", 			"P"],
+	["Fado", 			"P"],
+	["Lyon", 			"P"]
 ]);
 
 const charBases = new Map([
-	["Ike", 			[ 1, 19,  5,  1,  6,  7,  6,  5,  0,  9,  6]],
-	["Titania", 		[ 1, 33, 12,  4, 13, 14, 11, 11,  7,  8,  9]],
-	["Oscar", 			[ 3, 26,  6,  1,  6,  7,  5,  8,  0, 10,  8]],
-	["Boyd", 			[ 2, 30,  7,  9,  4,  6,  4,  5,  0, 10,  6]],
-	["Rhys", 			[ 4, 22,  0, 10,  8,  5,  8,  0, 14,  8,  5]],
-	["Shinon",			[ 1, 32,  9,  6, 15, 13,  9,  9,  6,  9,  7]],
-	["Gatrie", 			[ 9, 31, 12,  0,  6,  5,  5, 14,  0, 12,  5]],
-	["Soren", 			[ 1, 18,  0,  6,  8,  8,  5,  2,  7,  6,  5]],
-	["Mia", 			[ 6, 21,  7,  0, 10, 13,  6,  7,  2,  6,  6]],
-	["Ilyana", 			[ 6, 20,  1,  8, 10,  9,  6,  3, 10,  5,  5]],
-	["Mist", 			[ 1, 16,  1,  4,  4,  7,  6,  2,  7,  5,  5]],
-	["Rolf", 			[ 1, 18,  5,  0,  8,  6,  4,  6,  2,  4,  6]],
-	["Marcia", 			[ 5, 20,  8,  0,  7, 11,  4,  8,  6,  6,  8]],
-	["Lethe", 			[ 3, 34, 12,  4, 10, 12,  1,  9,  7,  6,  7]],
-	["Mordecai", 		[ 2, 41, 15,  2,  8,  8, 10, 13,  4, 18,  7]],
-	["Volke", 			[10, 25, 12,  0, 13, 13,  7,  7,  3, 11,  7]],
-	["Kieran", 			[12, 30, 11,  1, 10, 12,  8, 10,  1, 10,  8]],
-	["Brom", 			[ 8, 28, 10,  1,  9,  7,  4, 13,  2, 13,  5]],
-	["Nephenee", 		[ 7, 22,  8,  2, 10, 11,  6,  9,  3,  8,  8]],
-	["Zihark", 			[10, 25, 10,  1, 13, 15,  6,  7,  0,  9,  6]],
-	["Jill", 			[ 8, 24, 11,  0, 10,  9,  6, 11,  2,  7,  8]],
-	["Sothe (Base)", 	[ 1, 20,  5,  1,  7, 11,  5,  4,  0,  6,  7]],
-	["Sothe (Bl+Rand)", [ 1, 20,  5,  1,  7, 11,  5,  4,  0,  6,  7]],
-	["Sothe (Bl+Fix)",	[ 1, 20,  5,  1,  7, 11,  5,  4,  0,  6,  7]],
-	["Astrid", 			[ 1, 20,  6,  2,  6,  7,  3,  5,  4,  7,  8]],
-	["Makalov", 		[10, 30,  9,  2,  7, 10,  8, 10,  2, 10,  8]],
-	["Tormod", 			[ 7, 20,  2, 10,  9,  9,  8,  4,  9,  6,  5]],
-	["Muarim", 			[ 9, 45, 16,  4, 13, 15, 11, 12,  5, 14,  7]],
-	["Stefan", 			[ 8, 38, 19,  8, 27, 25,  5, 12,  9, 13,  7]],
-	["Devdan", 			[ 4, 36, 14,  7, 15, 13, 16, 11, 10, 12,  7]],
-	["Tanith", 			[10, 32, 16, 10, 18, 24, 18, 15, 13,  8,  9]],
-	["Reyson", 			[ 3, 22,  1, 10, 11, 14, 15,  2, 20,  8,  5]],
-	["Janaff", 			[ 8, 39, 13,  5, 15, 17, 16, 11, 10,  6,  6]],
-	["Ulki", 			[ 7, 14, 15,  4, 14, 12, 10, 14,  9, 10,  6]],
-	["Calill", 			[ 6, 32,  8, 19, 18, 18, 16,  8, 17,  7,  6]],
-	["Tauroneo", 		[14, 48, 22, 11, 18, 13, 14, 22, 14, 10,  6]],
-	["Ranulf", 			[ 9, 46, 19,  4, 17, 17, 13, 17, 6,   9,  7]],
-	["Haar", 			[11, 47, 21,  8, 19, 17, 12, 20, 10, 13,  9]],
-	["Bastian", 		[13, 35, 12, 19, 21, 16, 15, 12, 20, 10,  6]],
-	["Lucia", 			[12, 36, 15, 12, 21, 23, 16, 10,  8,  8,  7]],
-	["Geoffrey", 		[11, 43, 18,  9, 17, 19, 12, 21,  9, 11,  9]],
-	["Largo", 			[ 7, 52, 21,  4, 21, 20, 12, 10,  3, 15,  7]],
-	["Elincia", 		[ 1, 27,  9, 12, 16, 18, 15, 11, 15,  6,  9]],
-	["Nasir", 			[18, 56, 20, 11, 23, 22, 17, 24, 27, 12,  5]],
-	["Ena", 			[10, 52, 20,  9, 17, 15, 14, 23, 21,  6,  5]],
-	["Tibarn", 			[18, 63, 30, 11, 31, 24, 24, 26, 19, 14,  6]],
-	["Naesala", 		[17, 57, 25, 15, 26, 31, 19, 21, 16, 11,  6]],
-	["Giffca", 			[20, 68, 32, 10, 28, 25, 22, 25, 16, 17,  7]]
+	["Eirika", 			[ 1, 16,  4,  8,  9,  5,  3,  1,  5, 5]],
+	["Seth", 			[ 1, 20, 14, 13, 12, 13, 11,  8, 11, 8]],
+	["Franz", 			[ 1, 20,  7,  5,  7,  2,  6,  1,  9, 7]],
+	["Gilliam", 		[ 4, 25,  9,  6,  3,  3,  9,  3, 14, 4]],
+	["Vanessa",			[ 3, 17,  5,  7, 11,  4,  6,  5,  5, 7]],
+	["Moulder", 		[ 1, 20,  4,  6,  9,  1,  2,  5,  9, 5]],
+	["Ross", 			[ 1, 15,  5,  2,  3,  8,  3,  0,  8, 4]],
+	["Garcia", 			[ 4, 28,  8,  7,  7,  3,  5,  1, 14, 5]],
+	["Neimi", 			[ 1, 17,  4,  5,  6,  4,  3,  2,  5, 5]],
+	["Colm", 			[ 2, 18,  4,  4, 10,  8,  3,  1,  6, 6]],
+	["Artur", 			[ 2, 19,  6,  6,  8,  2,  2,  6,  6, 5]],
+	["Lute", 			[ 1, 17,  6,  6,  7,  8,  3,  5,  3, 5]],
+	["Natasha", 		[ 1, 18,  2,  4,  8,  6,  2,  6,  4, 5]],
+	["Joshua", 			[ 5, 24,  8, 13, 14,  7,  5,  2,  8, 5]],
+	["Ephraim", 		[ 4, 23,  8,  9, 11,  8,  7,  2,  8, 5]],
+	["Forde", 			[ 6, 24,  7,  8,  8,  7,  8,  2,  8, 7]],
+	["Kyle", 			[ 5, 25,  9,  6,  7,  6,  9,  1,  9, 7]],
+	["Orson (5x)", 		[ 3, 34, 15, 13, 11,  4, 13,  7, 12, 8]],
+	["Tana", 			[ 4, 20,  7,  9, 13,  8,  6,  7,  5, 7]],
+	["Amelia", 			[ 1, 16,  4,  3,  4,  6,  2,  3,  6, 4]],
+	["Amelia (late)", 	[ 4, 18,  5,  4,  5,  8,  3,  3,  6, 4]],
+	["Innes (Eir)", 	[ 1, 31, 14, 13, 15, 14, 10,  9,  9, 6]],
+	["Innes (Eph)", 	[ 3, 33, 15, 14, 16, 15, 10, 10,  9, 6]],
+	["Gerik", 			[10, 32, 14, 13, 13,  8, 10,  4, 13, 5]],
+	["Tethys", 			[ 1, 18,  1,  2, 12, 10,  5,  4,  5, 5]],
+	["Marisa", 			[ 5, 23,  7, 12, 13,  9,  4,  3,  5, 5]],
+	["LArachel", 		[ 3, 18,  6,  6, 10, 12,  5,  8,  5, 6]],
+	["Dozla", 			[ 1, 43, 16, 11,  9,  4, 11,  6, 16, 6]],
+	["Saleh (Eir)", 	[ 1, 30, 16, 18, 14, 11,  8, 13,  8, 6]],
+	["Saleh (Eph)", 	[ 4, 32, 17, 19, 15, 12,  9, 14,  8, 6]],
+	["Ewan", 			[ 1, 15,  3,  2,  5,  5,  0,  3,  5, 4]],
+	["Cormag (Eph)", 	[ 9, 30, 14,  9, 10,  4, 12,  2, 11, 7]],
+	["Cormag (Eir)", 	[11, 32, 15, 10, 11,  5, 13,  2, 11, 7]],
+	["Rennac", 			[ 1, 28, 10, 16, 17,  5,  9, 11,  7, 6]],
+	["Duessel (Eph)", 	[ 8, 41, 17, 12, 12,  8, 17,  9, 15, 6]],
+	["Duessel (Eir)", 	[10, 43, 18, 13, 13,  8, 18, 10, 15, 6]],
+	["Knoll", 			[10, 22, 13,  9,  8,  0,  2, 10,  7, 5]],
+	["Myrrh", 			[ 1, 15,  3,  1,  5,  3,  2,  7,  5, 6]],
+	["Syrene", 			[ 1, 27, 12, 13, 15, 12, 10, 12,  7, 8]],
+	["Caellach", 		[12, 47, 19, 14, 13, 14, 15, 13, 13, 6]],
+	["Orson (CC)", 		[13, 48, 18, 15, 14,  6, 14, 11, 12, 8]],
+	["Riev", 			[16, 49, 14, 21, 19,  9, 16, 18,  7, 6]],
+	["Ismaire", 		[ 9, 33, 16, 20, 23, 12,  8, 15,  7, 6]],
+	["Selena", 			[11, 38, 13, 13, 16, 10, 11, 17,  6, 7]],
+	["Glen", 			[12, 46, 20, 17, 13,  7, 18,  5, 12, 8]],
+	["Hayden", 			[10, 37, 17, 14, 15, 17, 12, 12, 10, 7]],
+	["Valter", 			[13, 45, 19, 17, 17,  3, 13, 12, 11, 8]],
+	["Fado", 			[11, 46, 20, 14, 12,  5, 18, 11, 18, 5]],
+	["Lyon", 			[14, 44, 22, 13, 11,  4, 17, 19,  7, 6]]
 ]);
 
-const unpromotedCaps = new Map([
-	["Ike", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Oscar", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Boyd", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Rhys", 			[40, 15, 20, 20, 20, 40, 20, 20]],
-	["Gatrie", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Soren", 			[40, 10, 20, 20, 20, 40, 10, 20]],
-	["Mia", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Ilyana", 			[40, 10, 20, 20, 20, 40, 10, 20]],
-	["Mist", 			[40, 15, 20, 20, 20, 40, 20, 20]],
-	["Rolf", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Marcia", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Volke", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Kieran", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Brom", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Nephenee", 		[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Zihark", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Jill", 			[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Astrid",			[40, 20, 15, 20, 20, 40, 20, 15]],
-	["Makalov", 		[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Tormod", 			[40, 10, 20, 20, 20, 40, 10, 20]]
-]);
-
-const promotedCaps = new Map([
-	["Ike", 			[60, 26, 20, 27, 28, 40, 24, 22]],
-	["Titania", 		[60, 25, 20, 26, 27, 40, 27, 26]],
-	["Oscar", 			[60, 26, 20, 26, 27, 40, 27, 25]],
-	["Boyd", 			[60, 30, 20, 28, 27, 40, 25, 20]],
-	["Rhys", 			[60, 15, 29, 22, 25, 40, 20, 30]],
-	["Shinon",			[60, 25, 20, 30, 28, 40, 25, 23]],
-	["Gatrie", 			[60, 29, 20, 27, 24, 40, 30, 25]],
-	["Soren", 			[60, 15, 30, 28, 28, 40, 20, 28]],
-	["Mia", 			[60, 22, 20, 29, 30, 40, 22, 25]],
-	["Ilyana", 			[60, 15, 30, 28, 28, 40, 20, 28]],
-	["Mist", 			[60, 20, 26, 24, 26, 40, 20, 29]],
-	["Rolf", 			[60, 25, 20, 30, 28, 40, 25, 23]],
-	["Marcia", 			[60, 23, 20, 26, 28, 40, 24, 27]],
-	["Lethe", 			[70, 32, 20, 38, 39, 40, 32, 30]],
-	["Mordecai", 		[75, 37, 20, 37, 37, 40, 35, 27]],
-	["Volke", 			[60, 23, 20, 30, 30, 40, 22, 20]],
-	["Kieran", 			[60, 26, 20, 26, 27, 40, 27, 25]],
-	["Brom", 			[60, 29, 20, 27, 24, 40, 30, 25]],
-	["Nephenee", 		[60, 25, 20, 28, 26, 40, 28, 25]],
-	["Zihark", 			[60, 24, 20, 29, 30, 40, 24, 22]],
-	["Jill", 			[60, 27, 20, 26, 27, 40, 27, 25]],
-	["Sothe (Base)", 	[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Sothe (Bl+Rand)", [40, 20, 15, 20, 20, 40, 20, 20]],
-	["Sothe (Bl+Fix)",	[40, 20, 15, 20, 20, 40, 20, 20]],
-	["Astrid", 			[60, 25, 20, 26, 27, 40, 27, 26]],
-	["Makalov", 		[60, 26, 20, 26, 27, 40, 27, 25]],
-	["Tormod", 			[60, 15, 30, 28, 28, 40, 20, 28]],
-	["Muarim", 			[75, 37, 20, 37, 37, 40, 35, 27]],
-	["Stefan", 			[60, 24, 20, 29, 30, 40, 24, 22]],
-	["Devdan", 			[60, 25, 20, 28, 26, 40, 28, 25]],
-	["Tanith", 			[60, 23, 20, 26, 28, 40, 24, 27]],
-	["Reyson", 			[60, 10, 20, 17, 26, 40, 15, 35]],
-	["Janaff", 			[65, 26, 20, 35, 36, 40, 26, 26]],
-	["Ulki", 			[65, 26, 20, 35, 36, 40, 26, 26]],
-	["Calill", 			[60, 15, 30, 28, 28, 40, 20, 28]],
-	["Tauroneo", 		[60, 29, 20, 27, 24, 40, 30, 25]],
-	["Ranulf", 			[70, 35, 20, 38, 38, 40, 35, 27]],
-	["Haar", 			[60, 29, 20, 28, 26, 40, 29, 22]],
-	["Bastian", 		[60, 15, 30, 28, 28, 40, 20, 28]],
-	["Lucia", 			[60, 22, 20, 29, 30, 40, 22, 25]],
-	["Geoffrey", 		[60, 25, 20, 25, 27, 40, 27, 26]],
-	["Largo", 			[60, 30, 20, 24, 28, 40, 26, 20]],
-	["Elincia", 		[60, 20, 25, 26, 28, 40, 24, 27]],
-	["Nasir", 			[80, 30, 25, 30, 32, 40, 35, 35]],
-	["Ena", 			[75, 35, 20, 31, 31, 40, 36, 30]],
-	["Tibarn", 			[75, 40, 20, 40, 39, 40, 35, 30]],
-	["Naesala", 		[70, 35, 25, 38, 40, 40, 30, 35]],
-	["Giffca", 			[80, 32, 20, 35, 33, 40, 35, 27]]
-]);
+const classCaps = new Map([
+	["Unpromoted",			[60, 20, 20, 20, 30, 20, 20, 20, 15]],
+	["Dancer (F)",			[60, 10, 10, 30, 30, 24, 26, 20, 15]],
+	["Great Lord (F)",		[60, 24, 28, 30, 30, 22, 25, 25, 15]],
+	["Great Lord (M)",		[60, 27, 26, 24, 30, 23, 23, 25, 15]],
+	["Swordmaster (M)",		[60, 24, 29, 30, 30, 22, 23, 20, 15]],
+	["Swordmaster (F)",		[60, 22, 29, 30, 30, 22, 25, 20, 15]],
+	["Assassin (M)",		[60, 20, 30, 30, 30, 20, 20, 20, 15]],
+	["Assassin (F)",		[60, 20, 30, 30, 30, 20, 20, 20, 15]],
+	["Rogue (M)",			[60, 20, 30, 30, 30, 20, 20, 20, 15]],
+	["Berserker (M)",		[60, 30, 29, 28, 30, 23, 21, 25, 15]],
+	["Warrior (M)",			[60, 30, 28, 26, 30, 26, 22, 25, 15]],
+	["Hero (M)",			[60, 25, 30, 26, 30, 25, 22, 25, 15]],
+	["Hero (F)",			[60, 24, 30, 26, 30, 24, 24, 25, 15]],
+	["Ranger (M)",			[60, 25, 28, 30, 30, 25, 23, 25, 15]],
+	["Ranger (F)",			[60, 23, 28, 30, 30, 22, 25, 25, 15]],
+	["Sniper (M)",			[60, 25, 30, 28, 30, 25, 23, 20, 15]],
+	["Sniper (F)",			[60, 24, 30, 29, 30, 24, 24, 20, 15]],
+	["General (M)",			[60, 29, 27, 24, 30, 30, 25, 25, 15]],
+	["General (F)",			[60, 27, 28, 25, 30, 29, 26, 25, 15]],
+	["Great Knight (M)",	[60, 28, 24, 24, 30, 29, 25, 25, 15]],
+	["Great Knight (F)",	[60, 26, 26, 25, 30, 28, 26, 25, 15]],
+	["Paladin (M)",			[60, 25, 26, 24, 30, 25, 25, 25, 15]],
+	["Paladin (F)",			[60, 23, 27, 25, 30, 24, 26, 25, 15]],
+	["Falcoknight (F)",		[60, 23, 25, 28, 30, 23, 26, 25, 15]],
+	["Wyvern Knight (M)", 	[60, 25, 26, 28, 30, 24, 22, 25, 15]],
+	["Wyvern Knight (F)", 	[60, 24, 25, 29, 30, 23, 23, 25, 15]],
+	["Wyvern Lord (M)",		[60, 27, 25, 23, 30, 28, 22, 25, 15]],
+	["Wyvern Lord (F)",		[60, 25, 26, 24, 30, 27, 23, 25, 15]],
+	["Sage (M)",			[60, 28, 30, 26, 30, 21, 25, 20, 15]],
+	["Sage (F)",			[60, 30, 28, 26, 30, 21, 25, 20, 15]],
+	["Bishop (M)",			[60, 25, 26, 24, 30, 22, 30, 20, 15]],
+	["Bishop (F)",			[60, 25, 25, 26, 30, 21, 30, 20, 15]],
+	["Mage Knight (M)",		[60, 25, 26, 25, 30, 25, 25, 25, 15]],
+	["Mage Knight (F)",		[60, 25, 24, 25, 30, 24, 28, 25, 15]],
+	["Valkyrie (F)",		[60, 25, 24, 25, 30, 24, 28, 25, 15]],
+	["Druid (M)",			[60, 29, 26, 26, 30, 21, 28, 20, 15]],
+	["Druid (F)",			[60, 29, 26, 26, 30, 20, 29, 20, 15]],
+	["Summoner (M)",		[60, 27, 27, 26, 30, 30, 28, 20, 15]],
+	["Summoner (F)",		[60, 27, 27, 26, 30, 20, 28, 20, 15]],
+	["Manakete (F)",		[60, 20, 20, 20, 30, 20, 20, 20, 15]],
+	["Manakete (M)",		[60, 20, 20, 20, 30, 20, 20, 25, 15]],
+	["Jrnymn 3 (M)",		[60, 26, 29, 28, 30, 23, 23, 20, 15]],
+	["Recruit 3 (F)",		[60, 23, 30, 29, 30, 22, 26, 20, 15]],
+	["Pupil 3 (M)",			[60, 29, 28, 27, 30, 21, 26, 20, 15]],
+	["Necromancer (M)",		[60, 30, 25, 25, 30, 30, 30, 25, 15]]
+])
 
 const promotionGains = new Map([
-	["Ike", 			[4, 3, 2, 2, 2, 0, 3, 2, 1, 1]],
-	["Oscar", 			[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
-	["Boyd", 			[6, 2, 1, 2, 1, 0, 2, 2, 1, 1]],
-	["Rhys", 			[3, 1, 3, 2, 2, 0, 2, 3, 1, 1]],
-	["Gatrie", 			[3, 3, 2, 2, 2, 0, 1, 3, 1, 1]],
-	["Soren", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
-	["Mia", 			[4, 1, 2, 2, 2, 0, 2, 2, 1, 1]],
-	["Ilyana", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 2]],
-	["Mist", 			[3, 2, 4, 1, 3, 0, 3, 2, 3, 1]],
-	["Rolf", 			[3, 3, 2, 2, 2, 0, 2, 2, 1, 1]],
-	["Marcia", 			[4, 2, 2, 2, 1, 0, 2, 3, 1, 1]],
-	["Volke", 			[2, 2, 1, 3, 2, 0, 2, 2, 0, 1]],
-	["Kieran", 			[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
-	["Brom", 			[3, 3, 2, 2, 2, 0, 1, 3, 1, 1]],
-	["Nephenee", 		[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
-	["Zihark", 			[4, 1, 2, 2, 2, 0, 2, 2, 1, 1]],
-	["Jill", 			[5, 2, 1, 2, 2, 0, 2, 1, 1, 1]],
-	["Astrid",			[5, 2, 2, 2, 1, 0, 3, 2, 1, 1]],
-	["Makalov", 		[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
-	["Tormod", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
+	["Lord → Great Lord (F)",				[4, 2, 2, 1, 0, 3, 5, 2, 2]],
+	["Lord → Great Lord (M)",				[4, 2, 3, 2, 0, 2, 5, 2, 2]],
+	["Myrmidon → Swordmaster (M)",			[5, 2, 0, 0, 0, 2, 1, 1, 1]],
+	["Myrmidon → Swordmaster (F)",			[4, 2, 1, 0, 0, 2, 1, 2, 1]],
+	["Myrmidon → Assassin (M)",				[3, 1, 0, 0, 0, 2, 2, 0, 1]],
+	["Myrmidon → Assassin (F)",				[2, 1, 1, 1, 0, 2, 1, 1, 1]],
+	["Thief → Assassin (M)",				[3, 1, 0, 0, 0, 2, 2, 2, 0]],
+	["Thief → Rogue (M)",					[2, 1, 1, 0, 0, 2, 2, 1, 0]],
+	["Pirate → Berserker (M)",				[4, 1, 1, 1, 0, 2, 2, 3, 1]],
+	["Pirate → Warrior (M)",				[3, 1, 2, 0, 0, 3, 3, 3, 1]],
+	["Fighter → Warrior (M)",				[3, 1, 2, 0, 0, 3, 3, 2, 1]],
+	["Fighter → Hero (M)",					[4, 1, 2, 2, 0, 2, 2, 0, 1]],
+	["Mercenary → Hero (M)",				[4, 1, 2, 2, 0, 2, 2, 2, 1]],
+	["Mercenray → Ranger (M)",				[3, 2, 1, 1, 0, 3, 3, 0, 2]],
+	["Archer → Ranger (M)",					[3, 2, 1, 1, 0, 3, 3, 2, 2]],
+	["Archer → Ranger (F)",					[2, 2, 2, 1, 0, 3, 3, 3, 2]],
+	["Archer → Sniper (M)",					[3, 1, 2, 2, 0, 2, 3, 1, 1]],
+	["Archer → Sniper (F)",					[4, 3, 1, 1, 0, 2, 2, 1, 1]],
+	["Knight → General (M)",				[4, 2, 2, 3, 0, 2, 3, 2, 1]],
+	["Knight → General (F)",				[3, 2, 3, 2, 0, 3, 3, 1, 1]],
+	["Knight → Great Knight (M)",			[3, 2, 1, 2, 0, 2, 1, 0, 2]],
+	["Knight → Great Knight (F)",			[3, 1, 1, 2, 0, 2, 2, 0, 2]],
+	["Cavalier → Great Knight (M)",			[3, 2, 1, 2, 0, 2, 1, 4,-1]],
+	["Cavalier → Great Knight (F)",			[3, 1, 1, 2, 0, 2, 2, 1,-1]],
+	["Cavalier → Paladin (M)",				[2, 1, 1, 1, 0, 2, 1, 2, 1]],
+	["Cavalier → Paladin (F)",				[1, 1, 1, 2, 0, 1, 2, 0, 1]],
+	["Pegasus Knight → Falcoknight (F)",	[5, 2, 0, 2, 0, 2, 2, 1, 1]],
+	["Pegasus Knight → Wyvern Knight (F)", 	[3, 2, 1, 2, 0, 1, 1, 4, 1]],
+	["Wyvern Rider → Wyvern Knight (M)", 	[3, 1, 2, 3, 0, 0, 1, 0, 1]],
+	["Wyvern Rider → Wyvern Lord (M)",		[4, 2, 2, 0, 0, 2, 0, 1, 1]],
+	["Monk → Mage Knight (M)",				[4, 2, 0, 0, 0, 2, 2, 2, 2]],
+	["Mage → Mage Knight (F)",				[3, 2, 1, 0, 0, 2, 2, 3, 2]],
+	["Mage → Sage (M)",						[4, 1, 0, 0, 0, 3, 3, 1, 1]],
+	["Mage → Sage (F)",						[3, 1, 1, 0, 0, 3, 3, 1, 1]],
+	["Monk → Sage (M)",						[4, 1, 0, 0, 0, 3, 3, 1, 1]],
+	["Priest → Sage (M)",					[4, 1, 0, 0, 0, 3, 3, 2, 1]],
+	["Monk → Bishop (M)",					[3, 2, 1, 0, 0, 3, 2, 1, 1]],
+	["Priest → Bishop (M)",					[3, 2, 1, 0, 0, 3, 2, 2, 1]],
+	["Cleric → Bishop (F)",					[3, 1, 2, 1, 0, 2, 2, 1, 1]],
+	["Cleric → Valkyrie (F)",				[3, 2, 1, 0, 0, 2, 3, 2, 2]],
+	["Troubador → Valkyrie (F)",			[3, 2, 1, 0, 0, 2, 3, 1, 1]],
+	["Troubador → Mage Knight (F)",			[3, 2, 1, 0, 0, 2, 2, 1, 1]],
+	["Shaman → Druid (M)",					[4, 0, 0, 3, 0, 2, 2, 1, 1]],
+	["Shaman → Summoner (M)",				[3, 0, 1, 3, 0, 1, 3, 1, 1]],
+	["Jrnymn → Fighter (M)",				[2, 2, 1, 0, 0, 0, 1, 3, 1]],
+	["Jrnymn → Pirate (M)",					[2, 2, 0, 1, 0, 1, 0, 2, 1]],
+	["Recruit → Cavalier (F)",				[1, 0, 2, 2, 0, 0, 2, 3, 3]],
+	["Recruit → Knight (F)",				[2, 1, 1, 1, 0, 2, 0, 4, 0]],
+	["Pupil → Mage (M)",					[1, 0, 1, 2, 0, 1, 2, 1, 1]],
+	["Pupil → Shaman (M)",					[1, 2, 0, 1, 0, 1, 2, 2, 1]],
+	["Jrnymn → Jrnymn 2 (M)",				[2, 0, 2, 0, 0, 2, 2, 0, 1]],
+	["Recruit → Recruit 2 (F)",				[2, 1, 1, 1, 0, 2, 1, 0, 1]],
+	["Pupil → Pupil 2 (M)",					[2, 1, 1, 0, 0, 2, 2, 0, 1]],
+	["Jrnymn 2 → Hero (M)",					[4, 1, 2, 2, 0, 2, 2, 3, 1]],
+	["Recruit 2 → Paladin (F)",				[1, 1, 1, 2, 0, 1, 2, 3, 3]],
+	["Pupil 2 → Sage (M)",					[4, 1, 0, 0, 0, 3, 3, 2, 1]],
+	["Jrnymn 2 → Jrnymn 3 (M)",				[4, 1, 2, 2, 0, 2, 2, 0, 1]],
+	["Recruit 2 → Recruit 3 (F)",			[2, 2, 1, 1, 0, 2, 1, 0, 1]],
+	["Pupil 2 → Pupil 3 (M)",				[4, 2, 0, 1, 0, 3, 3, 0, 1]]
+])
+
+const baseClasses = new Map([
+	["Eirika", 			"Lord"],
+	["Seth", 			"Paladin"],
+	["Franz", 			"Cavalier"],
+	["Gilliam", 		"Knight"],
+	["Vanessa", 		"Pegasus Knight"],
+	["Moulder",			"Priest"],
+	["Ross", 			"Jrnymn"],
+	["Garcia", 			"Fighter"],
+	["Neimi", 			"Archer"],
+	["Colm", 			"Thief"],
+	["Artur", 			"Monk"],
+	["Lute", 			"Mage"],
+	["Natasha", 		"Cleric"],
+	["Joshua", 			"Myrmidon"],
+	["Ephraim", 		"Lord"],
+	["Forde", 			"Cavalier"],
+	["Kyle", 			"Cavalier"],
+	["Orson (5x)", 		"Paladin"],
+	["Tana", 			"Pegasus Knight"],
+	["Amelia", 			"Recruit"],
+	["Amelia (late)", 	"Recruit"],
+	["Innes (Eir)", 	"Sniper"],
+	["Innes (Eph)", 	"Sniper"],
+	["Gerik", 			"Mercenary"],
+	["Tethys", 			"Dancer"],
+	["Marisa", 			"Myrmidon"],
+	["LArachel", 		"Troubador"],
+	["Dozla", 			"Berserker"],
+	["Saleh (Eir)", 	"Sage"],
+	["Saleh (Eph)", 	"Sage"],
+	["Ewan", 			"Pupil"],
+	["Cormag (Eph)", 	"Wyvern Rider"],
+	["Cormag (Eir)", 	"Wyvern Rider"],
+	["Rennac", 			"Rouge"],
+	["Duessel (Eph)", 	"Great Knight"],
+	["Duessel (Eir)", 	"Great Knight"],
+	["Knoll", 			"Shaman"],
+	["Myrrh", 			"Manakete"],
+	["Syrene", 			"Falcoknight"],
+	["Caellach", 		"Hero"],
+	["Orson (CC)",		"Paladin"],
+	["Riev", 			"Bishop"],
+	["Ismaire", 		"Swordmaster"],
+	["Selena", 			"Mage Knight"],
+	["Glen", 			"Wyvern Lord"],
+	["Hayden", 			"Ranger"],
+	["Valter", 			"Wyvern Knight"],
+	["Fado", 			"General"],
+	["Lyon", 			"Necromancer"]
 ]);
 
-const transformations = new Map([
-	["Lethe", 		[0, 6, 0, 4, 3, 0, 5, 3, 15, 2]],
-	["Mordecai", 	[0, 7, 0, 4, 3, 0, 3, 3, 15, 2]],
-	["Muarim", 		[0, 7, 0, 4, 3, 0, 3, 3, 15, 2]],
-	["Reyson", 		[0, 0, 5, 3, 4, 0, 1, 5,  6, 2]],
-	["Janaff", 		[0, 6, 0, 5, 3, 0, 4, 2, 10, 2]],
-	["Ulki", 		[0, 6, 0, 5, 3, 0, 4, 2, 10, 2]],
-	["Ranulf", 		[0, 6, 0, 4, 3, 0, 5, 3, 15, 2]],
-	["Nasir", 		[0,10, 0, 5, 3, 0, 5, 5, 24, 1]],
-	["Ena", 		[0, 5, 4, 4, 4, 0, 5, 5, 12, 1]],
-	["Tibarn", 		[0, 7, 1, 5, 3, 0, 3, 1,  8, 2]],
-	["Naesala", 	[0, 6, 2, 4, 3, 0, 3, 3,  7, 2]],
-	["Giffca", 		[0, 8, 0, 4, 4, 0, 5, 3, 15, 2]]
+const classPromotions = new Map([
+	["Eirika", 			["Great Lord"]],
+	["Seth", 			["Paladin"]],
+	["Franz", 			["Paladin", "Great Knight"]],
+	["Gilliam", 		["General", "Great Knight"]],
+	["Vanessa",			["Wyvern Knight", "Falcoknight"]],
+	["Moulder", 		["Bishop", "Sage"]],
+	["Ross", 			["Fighter → Hero", "Fighter → Warrior", "Pirate → Warrior", "Pirate → Berserker", "Jrnymn 2 → Hero", "Jrnymn 2 → Jrnymn 3"]],
+	["Garcia", 			["Warrior", "Hero"]],
+	["Neimi", 			["Ranger", "Sniper"]],
+	["Colm", 			["Rogue", "Assassin"]],
+	["Artur", 			["Sage", "Mage Knight"]],
+	["Lute", 			["Mage Knight", "Sage"]],
+	["Natasha", 		["Bishop", "Valkyrie"]],
+	["Joshua", 			["Swordmaster", "Assassin"]],
+	["Ephraim", 		["Great Lord"]],
+	["Forde", 			["Paladin", "Great Knight"]],
+	["Kyle", 			["Great Knight", "Paladin"]],
+	["Orson (5x)", 		["Paladin"]],
+	["Tana", 			["Falcoknight", "Wyvern Knight"]],
+	["Amelia", 			["Cavalier → Paladin", "Cavalier → Great Knight", "Knight → Great Knight", "Knight → General", "Recruit 2 → Paladin", "Recruit 2 → Recruit 3"]],
+	["Amelia (late)", 	["Cavalier → Paladin", "Cavalier → Great Knight", "Knight → Great Knight", "Knight → General", "Recruit 2 → Paladin", "Recruit 2 → Recruit 3"]],
+	["Innes (Eir)", 	["Sniper"]],
+	["Innes (Eph)", 	["Sniper"]],
+	["Gerik", 			["Hero", "Ranger"]],
+	["Tethys", 			["Dancer"]],
+	["Marisa", 			["Swordmaster", "Assassin"]],
+	["LArachel", 		["Valkyrie", "Mage Knight"]],
+	["Dozla", 			["Berserker"]],
+	["Saleh (Eir)", 	["Sage"]],
+	["Saleh (Eph)", 	["Sage"]],
+	["Ewan", 			["Mage → Sage", "Mage → Mage Knight", "Shaman → Druid", "Shaman → Summoner", "Pupil 2 → Sage", "Pupil 2 → Pupil 3"]],
+	["Cormag (Eph)", 	["Wyvern Lord", "Wyvern Knight"]],
+	["Cormag (Eir)", 	["Wyvern Lord", "Wyvern Knight"]],
+	["Rennac", 			["Rogue"]],
+	["Duessel (Eph)", 	["Great Knight"]],
+	["Duessel (Eir)", 	["Great Knight"]],
+	["Knoll", 			["Summoner", "Druid"]],
+	["Myrrh", 			["Manakete"]],
+	["Syrene", 			["Falcoknight"]],
+	["Caellach", 		["Hero"]],
+	["Orson (CC)", 		["Paladin"]],
+	["Riev", 			["Bishop"]],
+	["Ismaire", 		["Swordmaster"]],
+	["Selena", 			["Mage Knight"]],
+	["Glen", 			["Wyvern Lord"]],
+	["Hayden", 			["Ranger"]],
+	["Valter", 			["Wyvern Knight"]],
+	["Fado", 			["General"]],
+	["Lyon", 			["Necromancer"]]
 ]);
-
 
 function updateHit(){
 	trueHitRate = ((displayedHit.value * (2 * displayedHit.value + 1) - (Math.abs(displayedHit.value - 50.5) / (displayedHit.value - 50.5) + 1) * ((displayedHit.value - 50) * (2 * displayedHit.value - 99))) / 100).toString() + "%";
@@ -332,47 +440,75 @@ function updateHit(){
 }
 
 function updateEXP(){
-	let levelDifference = enemyLevel.value - playerLevel.value;
-	let bonus = 25 - difficulty.selectedIndex * 5;
-	if (difficulty.selectedIndex == 0){
-		bonus += 5;
+	let playerPower = 3;
+	if (playerType.selectedIndex == 2){
+		playerPower = 2;
 	}
-	let expGain = Math.floor((21 + levelDifference) / 2);
-	if (difficulty.selectedIndex == 0){
-		expGain += 5;
+	else if (playerType.selectedIndex == 4){
+		playerPower = 1;
 	}
-	expGain = Math.max(expGain, 1);
+	let expGain = Math.max(Math.floor((31 + enemyLevel.value * 1 - playerLevel.value * 1) / (playerPower)), 1);
 	if (killEXP.checked){
-		expGain += Math.max(levelDifference + bonus + bossEXP.checked * (bonus + 10) + thiefEXP.checked * 20, 0);
+		let playerBonus = 0;
+		if (playerType.selectedIndex == 1){
+			playerBonus = 60;
+		}
+		else if (playerType.selectedIndex == 3 || playerType.selectedIndex == 5){
+			playerBonus = 40;
+		}
+		let enemyPower = 3;
+		let enemyBonus = 0;
+		let thiefEXP = 0;
+		let entombedEXP = 0;
+		if (enemyType.selectedIndex == 1){
+			enemyBonus = 60;
+		}
+		else if (enemyType.selectedIndex == 2){
+			enemyPower = 2;
+			thiefEXP = 20;
+		}
+		else if (enemyType.selectedIndex == 3){
+			enemyBonus = 40;
+			thiefEXP = 20;
+		}
+		else if (enemyType.selectedIndex == 4){
+			enemyPower = 2;
+		}
+		else if (enemyType.selectedIndex == 5){
+			enemyBonus = 40;
+		}
+		else if (enemyType.selectedIndex == 6){
+			enemyPower = 1;
+			entombedEXP = 40;
+		}
+		else if (enemyType.selectedIndex == 7){
+			enemyPower = 5;
+			bossEXP.checked = true;
+			chapterEXP.checked = false;
+			enemyLevel.selectedIndex = 0;
+		}
+		let mode = chapterEXP.checked * 1 + 1;
+		if (mode == 1){
+			if (enemyLevel.value * enemyPower + enemyBonus <= playerLevel.vaule * playerPower + playerBonus){
+				mode = 2;
+			}
+		}
+		expGain += Math.max(Math.floor((silencerEXP.checked * 1 + 1) * ((enemyLevel.value * enemyPower + enemyBonus) - ((playerLevel.value * playerPower + playerBonus) / mode) + 20 + thiefEXP + entombedEXP + bossEXP.checked * 40)), 0);
+		expGain = Math.min(expGain, 100);
 	}
-	if (expGrowth.selectedIndex == 1){
-		expGain = Math.floor(expGain * 2 / 3);
-	}
-	else if (expGrowth.selectedIndex == 2){
-		expGain *= 2;
-	}
-	expGain = Math.min(expGain, 100);
 	exp.innerHTML = expGain + " EXP";
 }
 
-function updateCharAverage(){
-	if (charAverage.value != "Ike"){
-		while(promoLevelAverage.options.length > 11){
-			promoLevelAverage.remove(11);
-		}
+function updateCharAverage() {
+	char = charAverage.value;
+	if (char.includes("'")) {
+		char = char.replaceAll("'", "")
 	}
-	else{
-		for (let i = 9; i >= 1; i--) {
-			promoLevelAverage.options[20-i] = new Option(i);
-		}
+	while (promoClassAverage.options.length > 0) {
+		promoClassAverage.remove(0);
 	}
-	if (charAverage.value == "Reyson"){
-		if(transformation.options.length > 2){
-			transformation.remove(2);
-		}
-	}
-	else{
-		transformation.options[2] = new Option("Demi Band");
+	for (let i = 0; i < classPromotions.get(char).length; i++){
+		promoClassAverage.options[i] = new Option(classPromotions.get(char)[i]);
 	}
 	updateAverageTable();
 }
@@ -389,19 +525,17 @@ function updateAverageTable(){
 	row = averageGrowths.insertRow(1);
 	level = row.insertCell(0);
 	hp = row.insertCell(1);
-	str = row.insertCell(2);
-	mag = row.insertCell(3);
-	skl = row.insertCell(4);
-	spd = row.insertCell(5);
-	lck = row.insertCell(6);
-	def = row.insertCell(7);
-	res = row.insertCell(8);
-	con = row.insertCell(9);
-	mov = row.insertCell(10);
+	atk = row.insertCell(2);
+	skl = row.insertCell(3);
+	spd = row.insertCell(4);
+	lck = row.insertCell(5);
+	def = row.insertCell(6);
+	res = row.insertCell(7);
+	con = row.insertCell(8);
+	mov = row.insertCell(9);
 	level.innerHTML = "<b>Base stats</b>";
 	hp.innerHTML = "<span id=\"aBaseHP\"></span>";
-	str.innerHTML = "<span id=\"aBaseSTR\"></span>";
-	mag.innerHTML = "<span id=\"aBaseMAG\"></span>";
+	atk.innerHTML = "<span id=\"aBaseATK\"></span>";
 	skl.innerHTML = "<span id=\"aBaseSKL\"></span>";
 	spd.innerHTML = "<span id=\"aBaseSPD\"></span>";
 	lck.innerHTML = "<span id=\"aBaseLCK\"></span>";
@@ -409,45 +543,99 @@ function updateAverageTable(){
 	res.innerHTML = "<span id=\"aBaseRES\"></span>";
 	con.innerHTML = "<span id=\"aBaseCON\"></span>";
 	mov.innerHTML = "<span id=\"aBaseMOV\"></span>";
-	for (let i = 0; i < 10; i++){
-		let stat = charBases.get(char)[i+1];
-		if (promotions.get(char) == "B" && transformation.value == "Transformed"){
-			stat += transformations.get(char)[i];
-		}
-		else if (promotions.get(char) == "B" && transformation.value == "Demi Band"){
-			stat += Math.ceil(transformations.get(char)[i] / 2);
-		}
-		this["aBase"+(stats[i])].innerHTML = stat;
+	for (let i = 0; i < 9; i++){
+		this["aBase"+(stats[i])].innerHTML = charBases.get(char)[i+1];
 	}
 	currentHP = charBases.get(char)[1];
-	currentSTR = charBases.get(char)[2];
-	currentMAG = charBases.get(char)[3];
-	currentSKL = charBases.get(char)[4];
-	currentSPD = charBases.get(char)[5];
-	currentLCK = charBases.get(char)[6];
-	currentDEF = charBases.get(char)[7];
-	currentRES = charBases.get(char)[8];
-	currentCON = charBases.get(char)[9];
-	currentMOV = charBases.get(char)[10];
-	if(promotions.get(char) == "N"){
+	currentATK = charBases.get(char)[2];
+	currentSKL = charBases.get(char)[3];
+	currentSPD = charBases.get(char)[4];
+	currentLCK = charBases.get(char)[5];
+	currentDEF = charBases.get(char)[6];
+	currentRES = charBases.get(char)[7];
+	currentCON = charBases.get(char)[8];
+	currentMOV = charBases.get(char)[9];
+	if(promotions.get(char) == "T"){
+		for (let i = charBases.get(char)[0]-1; i < 9; i++){
+			row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
+			let level = row.insertCell(0);
+			let hp = row.insertCell(1);
+			let atk = row.insertCell(2);
+			let skl = row.insertCell(3);
+			let spd = row.insertCell(4);
+			let lck = row.insertCell(5);
+			let def = row.insertCell(6);
+			let res = row.insertCell(7);
+			let con = row.insertCell(8);
+			let mov = row.insertCell(9);
+			level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
+			hp.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"HPavg\"></span>";
+			atk.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"ATKavg\"></span>";
+			skl.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"SKLavg\"></span>";
+			spd.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"SPDavg\"></span>";
+			lck.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"LCKavg\"></span>";
+			def.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"DEFavg\"></span>";
+			res.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"RESavg\"></span>";
+			con.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"CONavg\"></span>";
+			mov.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"MOVavg\"></span>";
+			for (let j = 0; j < 9; j++){
+				this["current"+stats[j]] += charGrowths.get(char)[j] / 100;
+				this["current"+stats[j]] = Math.round(this["current"+stats[j]] * 100) / 100;
+				this["Tlevel"+(i+2).toString()+stats[j]+"avg"].innerHTML = this["current"+stats[j]];
+			}
+		}
+		row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
+		let level = row.insertCell(0);
+		let hp = row.insertCell(1);
+		let atk = row.insertCell(2);
+		let skl = row.insertCell(3);
+		let spd = row.insertCell(4);
+		let lck = row.insertCell(5);
+		let def = row.insertCell(6);
+		let res = row.insertCell(7);
+		let con = row.insertCell(8);
+		let mov = row.insertCell(9);
+		level.innerHTML = "<b>Promotion</b>";
+		let promotion = baseClasses.get(char) + " → " + promoClassAverage.value.split(" → ")[0] + " (" + genders.get(char)+")";
+		currentHP += promotionGains.get(promotion)[0];
+		currentATK += promotionGains.get(promotion)[1];
+		currentSKL += promotionGains.get(promotion)[2];
+		currentSPD += promotionGains.get(promotion)[3];
+		currentLCK += promotionGains.get(promotion)[4];
+		currentDEF += promotionGains.get(promotion)[5];
+		currentRES += promotionGains.get(promotion)[6];
+		currentCON += promotionGains.get(promotion)[7];
+		currentMOV += promotionGains.get(promotion)[8];
+		hp.innerHTML = "<b>"+Math.round(currentHP * 100) / 100+"</b>";
+		atk.innerHTML = "<b>"+Math.round(currentATK * 100) / 100+"</b>";
+		skl.innerHTML = "<b>"+Math.round(currentSKL * 100) / 100+"</b>";
+		spd.innerHTML = "<b>"+Math.round(currentSPD * 100) / 100+"</b>";
+		lck.innerHTML = "<b>"+Math.round(currentLCK * 100) / 100+"</b>";
+		def.innerHTML = "<b>"+Math.round(currentDEF * 100) / 100+"</b>";
+		res.innerHTML = "<b>"+Math.round(currentRES * 100) / 100+"</b>";
+		con.innerHTML = "<b>"+Math.round(currentCON * 100) / 100+"</b>";
+		mov.innerHTML = "<b>"+Math.round(currentMOV * 100) / 100+"</b>";
+	}
+	if(promotions.get(char) == "N" || promotions.get(char) == "T"){
 		let baseLevel = charBases.get(char)[0];
+		if(promotions.get(char) == "T"){
+			baseLevel = 1;
+		}
 		for (let i = baseLevel-1; i < promoLevelAverage.value - 1; i++){
 			row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
 			let level = row.insertCell(0);
 			let hp = row.insertCell(1);
-			let str = row.insertCell(2);
-			let mag = row.insertCell(3);
-			let skl = row.insertCell(4);
-			let spd = row.insertCell(5);
-			let lck = row.insertCell(6);
-			let def = row.insertCell(7);
-			let res = row.insertCell(8);
-			let con = row.insertCell(9);
-			let mov = row.insertCell(10);
+			let atk = row.insertCell(2);
+			let skl = row.insertCell(3);
+			let spd = row.insertCell(4);
+			let lck = row.insertCell(5);
+			let def = row.insertCell(6);
+			let res = row.insertCell(7);
+			let con = row.insertCell(8);
+			let mov = row.insertCell(9);
 			level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
 			hp.innerHTML = "<span id=\"level"+(i+2).toString()+"HPavg\"></span>";
-			str.innerHTML = "<span id=\"level"+(i+2).toString()+"STRavg\"></span>";
-			mag.innerHTML = "<span id=\"level"+(i+2).toString()+"MAGavg\"></span>";
+			atk.innerHTML = "<span id=\"level"+(i+2).toString()+"ATKavg\"></span>";
 			skl.innerHTML = "<span id=\"level"+(i+2).toString()+"SKLavg\"></span>";
 			spd.innerHTML = "<span id=\"level"+(i+2).toString()+"SPDavg\"></span>";
 			lck.innerHTML = "<span id=\"level"+(i+2).toString()+"LCKavg\"></span>";
@@ -455,12 +643,12 @@ function updateAverageTable(){
 			res.innerHTML = "<span id=\"level"+(i+2).toString()+"RESavg\"></span>";
 			con.innerHTML = "<span id=\"level"+(i+2).toString()+"CONavg\"></span>";
 			mov.innerHTML = "<span id=\"level"+(i+2).toString()+"MOVavg\"></span>";
-			for (let j = 0; j < 10; j++){
+			for (let j = 0; j < 9; j++){
 				this["current"+stats[j]] += charGrowths.get(char)[j] / 100;
 				this["current"+stats[j]] = Math.round(this["current"+stats[j]] * 100) / 100;
 
-				if (this["current"+stats[j]] >= unpromotedCaps.get(char)[j]){
-					this["current"+stats[j]] = unpromotedCaps.get(char)[j];
+				if (this["current"+stats[j]] >= classCaps.get("Unpromoted")[j]){
+					this["current"+stats[j]] = classCaps.get("Unpromoted")[j];
 					this["level"+(i+2).toString()+stats[j]+"avg"].innerHTML = "<b>"+this["current"+stats[j]]+"</b>";
 				}
 				else{
@@ -471,29 +659,30 @@ function updateAverageTable(){
 		row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
 		let level = row.insertCell(0);
 		let hp = row.insertCell(1);
-		let str = row.insertCell(2);
-		let mag = row.insertCell(3);
-		let skl = row.insertCell(4);
-		let spd = row.insertCell(5);
-		let lck = row.insertCell(6);
-		let def = row.insertCell(7);
-		let res = row.insertCell(8);
-		let con = row.insertCell(9);
-		let mov = row.insertCell(10);
+		let atk = row.insertCell(2);
+		let skl = row.insertCell(3);
+		let spd = row.insertCell(4);
+		let lck = row.insertCell(5);
+		let def = row.insertCell(6);
+		let res = row.insertCell(7);
+		let con = row.insertCell(8);
+		let mov = row.insertCell(9);
 		level.innerHTML = "<b>Promotion</b>";
-		currentHP += promotionGains.get(char)[0];
-		currentSTR += promotionGains.get(char)[1];
-		currentMAG += promotionGains.get(char)[2];
-		currentSKL += promotionGains.get(char)[3];
-		currentSPD += promotionGains.get(char)[4];
-		currentLCK += promotionGains.get(char)[5];
-		currentDEF += promotionGains.get(char)[6];
-		currentRES += promotionGains.get(char)[7];
-		currentCON += promotionGains.get(char)[8];
-		currentMOV += promotionGains.get(char)[9];
+		let promotion = promoClassAverage.value + " (" + genders.get(char)+")";
+		if(promotions.get(char) != "T"){
+			promotion = baseClasses.get(char) + " → " + promotion;
+		}
+		currentHP += promotionGains.get(promotion)[0];
+		currentATK += promotionGains.get(promotion)[1];
+		currentSKL += promotionGains.get(promotion)[2];
+		currentSPD += promotionGains.get(promotion)[3];
+		currentLCK += promotionGains.get(promotion)[4];
+		currentDEF += promotionGains.get(promotion)[5];
+		currentRES += promotionGains.get(promotion)[6];
+		currentCON += promotionGains.get(promotion)[7];
+		currentMOV += promotionGains.get(promotion)[8];
 		hp.innerHTML = "<b>"+Math.round(currentHP * 100) / 100+"</b>";
-		str.innerHTML = "<b>"+Math.round(currentSTR * 100) / 100+"</b>";
-		mag.innerHTML = "<b>"+Math.round(currentMAG * 100) / 100+"</b>";
+		atk.innerHTML = "<b>"+Math.round(currentATK * 100) / 100+"</b>";
 		skl.innerHTML = "<b>"+Math.round(currentSKL * 100) / 100+"</b>";
 		spd.innerHTML = "<b>"+Math.round(currentSPD * 100) / 100+"</b>";
 		lck.innerHTML = "<b>"+Math.round(currentLCK * 100) / 100+"</b>";
@@ -503,26 +692,24 @@ function updateAverageTable(){
 		mov.innerHTML = "<b>"+Math.round(currentMOV * 100) / 100+"</b>";
 	}
 	let baseLevel = 1;
-	if(promotions.get(char) != "N"){
+	if(promotions.get(char) == "P"){
 		baseLevel = charBases.get(char)[0];
 	}
 	for (let i = baseLevel-1; i < 19; i++){
 		row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
 		let level = row.insertCell(0);
 		let hp = row.insertCell(1);
-		let str = row.insertCell(2);
-		let mag = row.insertCell(3);
-		let skl = row.insertCell(4);
-		let spd = row.insertCell(5);
-		let lck = row.insertCell(6);
-		let def = row.insertCell(7);
-		let res = row.insertCell(8);
-		let con = row.insertCell(9);
-		let mov = row.insertCell(10);
+		let atk = row.insertCell(2);
+		let skl = row.insertCell(3);
+		let spd = row.insertCell(4);
+		let lck = row.insertCell(5);
+		let def = row.insertCell(6);
+		let res = row.insertCell(7);
+		let con = row.insertCell(8);
+		let mov = row.insertCell(9);
 		level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
 		hp.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"HPavg\"></span>";
-		str.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"STRavg\"></span>";
-		mag.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"MAGavg\"></span>";
+		atk.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"ATKavg\"></span>";
 		skl.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SKLavg\"></span>";
 		spd.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SPDavg\"></span>";
 		lck.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"LCKavg\"></span>";
@@ -530,24 +717,324 @@ function updateAverageTable(){
 		res.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"RESavg\"></span>";
 		con.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"CONavg\"></span>";
 		mov.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"MOVavg\"></span>";
-		for (let j = 0; j < 10; j++){
+		let promotion = promoClassAverage.value + " (" + genders.get(char)+")";
+		if(promotions.get(char) == "T"){
+			promotion = promotion.split(" → ")[1];
+		}
+		for (let j = 0; j < 9; j++){
 			this["current"+stats[j]] += charGrowths.get(char)[j] / 100;
 			this["current"+stats[j]] = Math.round(this["current"+stats[j]] * 100) / 100;
-			if (this["current"+stats[j]] >= promotedCaps.get(char)[j]){
-				this["current"+stats[j]] = promotedCaps.get(char)[j];
-			}
-			let stat = this["current"+stats[j]];
-			if (promotions.get(char) == "B" && transformation.value == "Transformed"){
-				stat += transformations.get(char)[j];
-			}
-			else if (promotions.get(char) == "B" && transformation.value == "Demi Band"){
-				stat += Math.ceil(transformations.get(char)[j] / 2);
-			}
-			if (this["current"+stats[j]] == promotedCaps.get(char)[j]){
-				this["Plevel"+(i+2).toString()+stats[j]+"avg"].innerHTML = "<b>"+stat+"</b>";
+
+			if (this["current"+stats[j]] >= classCaps.get(promotion)[j]){
+				this["current"+stats[j]] = classCaps.get(promotion)[j];
+				this["Plevel"+(i+2).toString()+stats[j]+"avg"].innerHTML = "<b>"+this["current"+stats[j]]+"</b>";
 			}
 			else{
-				this["Plevel"+(i+2).toString()+stats[j]+"avg"].innerHTML = stat;
+				this["Plevel"+(i+2).toString()+stats[j]+"avg"].innerHTML = this["current"+stats[j]];
+			}
+		}
+	}
+}
+
+function updateCharFixed() {
+	char = charFixed.value;
+	if (char.includes("'")) {
+		char = char.replaceAll("'", "")
+	}
+	while (promoClassFixed.options.length > 0) {
+		promoClassFixed.remove(0);
+	}
+	for (let i = 0; i < classPromotions.get(char).length; i++){
+		promoClassFixed.options[i] = new Option(classPromotions.get(char)[i]);
+	}
+	updateFixedTable();
+}
+
+function updateFixedTable(){
+	char = charFixed.value;
+	if (char.includes("'")) {
+		char = char.replaceAll("'", "")
+	}
+	var fixedGrowths = document.getElementById("fixedGrowths");
+	while (fixedGrowths.rows.length > 2){
+		fixedGrowths.deleteRow(1);
+	}
+	row = fixedGrowths.insertRow(1);
+	level = row.insertCell(0);
+	hp = row.insertCell(1);
+	atk = row.insertCell(2);
+	skl = row.insertCell(3);
+	spd = row.insertCell(4);
+	lck = row.insertCell(5);
+	def = row.insertCell(6);
+	res = row.insertCell(7);
+	con = row.insertCell(8);
+	mov = row.insertCell(9);
+	level.innerHTML = "<b>Base stats</b>";
+	hp.innerHTML = "<span id=\"fBaseHP\"></span>";
+	atk.innerHTML = "<span id=\"fBaseATK\"></span>";
+	skl.innerHTML = "<span id=\"fBaseSKL\"></span>";
+	spd.innerHTML = "<span id=\"fBaseSPD\"></span>";
+	lck.innerHTML = "<span id=\"fBaseLCK\"></span>";
+	def.innerHTML = "<span id=\"fBaseDEF\"></span>";
+	res.innerHTML = "<span id=\"fBaseRES\"></span>";
+	con.innerHTML = "<span id=\"fBaseCON\"></span>";
+	mov.innerHTML = "<span id=\"fBaseMOV\"></span>";
+	for (let i = 0; i < 9; i++){
+		this["fBase"+(stats[i])].innerHTML = charBases.get(char)[i+1];
+	}
+	currentHP = charBases.get(char)[1];
+	currentATK = charBases.get(char)[2];
+	currentSKL = charBases.get(char)[3];
+	currentSPD = charBases.get(char)[4];
+	currentLCK = charBases.get(char)[5];
+	currentDEF = charBases.get(char)[6];
+	currentRES = charBases.get(char)[7];
+	currentCON = charBases.get(char)[8];
+	currentMOV = charBases.get(char)[9];
+	if(promotions.get(char) == "T"){
+		for (let i = charBases.get(char)[0]-1; i < 9; i++){
+			row = fixedGrowths.insertRow(fixedGrowths.rows.length - 1);
+			let level = row.insertCell(0);
+			let hp = row.insertCell(1);
+			let atk = row.insertCell(2);
+			let skl = row.insertCell(3);
+			let spd = row.insertCell(4);
+			let lck = row.insertCell(5);
+			let def = row.insertCell(6);
+			let res = row.insertCell(7);
+			let con = row.insertCell(8);
+			let mov = row.insertCell(9);
+			level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
+			hp.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"HPgrowth\"></span>";
+			atk.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"ATKgrowth\"></span>";
+			skl.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"SKLgrowth\"></span>";
+			spd.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"SPDgrowth\"></span>";
+			lck.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"LCKgrowth\"></span>";
+			def.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"DEFgrowth\"></span>";
+			res.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"RESgrowth\"></span>";
+			con.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"CONgrowth\"></span>";
+			mov.innerHTML = "<span id=\"Tlevel"+(i+2).toString()+"MOVgrowth\"></span>";
+			for (let j = 0; j < 9; j++){
+				stat = Math.round((i+1) * charGrowths.get(char)[j] / 100) - Math.round(i * charGrowths.get(char)[j] / 100);
+				if (stat == 0){
+					this["Tlevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = this["current"+stats[j]];
+				}
+				if (stat == 1){
+					this["current"+stats[j]] += 1;
+					this["Tlevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<b>"+this["current"+stats[j]]+"</b>";
+				}
+				if (stat > 1){
+					this["current"+stats[j]] += stat;
+					this["Tlevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<i><b>"+this["current"+stats[j]]+"</b></i>";
+				}
+			}
+		}
+		row = fixedGrowths.insertRow(fixedGrowths.rows.length - 1);
+		let level = row.insertCell(0);
+		let hp = row.insertCell(1);
+		let atk = row.insertCell(2);
+		let skl = row.insertCell(3);
+		let spd = row.insertCell(4);
+		let lck = row.insertCell(5);
+		let def = row.insertCell(6);
+		let res = row.insertCell(7);
+		let con = row.insertCell(8);
+		let mov = row.insertCell(9);
+		level.innerHTML = "<b>Promotion</b>";
+		let promotion = baseClasses.get(char) + " → " + promoClassFixed.value.split(" → ")[0] + " (" + genders.get(char)+")";
+		currentHP += promotionGains.get(promotion)[0];
+		currentATK += promotionGains.get(promotion)[1];
+		currentSKL += promotionGains.get(promotion)[2];
+		currentSPD += promotionGains.get(promotion)[3];
+		currentLCK += promotionGains.get(promotion)[4];
+		currentDEF += promotionGains.get(promotion)[5];
+		currentRES += promotionGains.get(promotion)[6];
+		currentCON += promotionGains.get(promotion)[7];
+		currentMOV += promotionGains.get(promotion)[8];
+		hp.innerHTML = currentHP;
+		atk.innerHTML = currentATK;
+		skl.innerHTML = currentSKL;
+		spd.innerHTML = currentSPD;
+		lck.innerHTML = currentLCK;
+		def.innerHTML = currentDEF;
+		res.innerHTML = currentRES;
+		con.innerHTML = currentCON;
+		mov.innerHTML = currentMOV;
+	}
+	if(promotions.get(char) == "N" || promotions.get(char) == "T"){
+		let baseLevel = charBases.get(char)[0];
+		if(promotions.get(char) == "T"){
+			baseLevel = 1;
+		}
+		for (let i = baseLevel-1; i < promoLevelFixed.value - 1; i++){
+			row = fixedGrowths.insertRow(fixedGrowths.rows.length - 1);
+			let level = row.insertCell(0);
+			let hp = row.insertCell(1);
+			let atk = row.insertCell(2);
+			let skl = row.insertCell(3);
+			let spd = row.insertCell(4);
+			let lck = row.insertCell(5);
+			let def = row.insertCell(6);
+			let res = row.insertCell(7);
+			let con = row.insertCell(8);
+			let mov = row.insertCell(9);
+			level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
+			hp.innerHTML = "<span id=\"level"+(i+2).toString()+"HPgrowth\"></span>";
+			atk.innerHTML = "<span id=\"level"+(i+2).toString()+"ATKgrowth\"></span>";
+			skl.innerHTML = "<span id=\"level"+(i+2).toString()+"SKLgrowth\"></span>";
+			spd.innerHTML = "<span id=\"level"+(i+2).toString()+"SPDgrowth\"></span>";
+			lck.innerHTML = "<span id=\"level"+(i+2).toString()+"LCKgrowth\"></span>";
+			def.innerHTML = "<span id=\"level"+(i+2).toString()+"DEFgrowth\"></span>";
+			res.innerHTML = "<span id=\"level"+(i+2).toString()+"RESgrowth\"></span>";
+			con.innerHTML = "<span id=\"level"+(i+2).toString()+"CONgrowth\"></span>";
+			mov.innerHTML = "<span id=\"level"+(i+2).toString()+"MOVgrowth\"></span>";
+			for (let j = 0; j < 9; j++){
+				stat = Math.round((i+1) * charGrowths.get(char)[j] / 100) - Math.round(i * charGrowths.get(char)[j] / 100);
+				if (stat == 0){
+					if (this["current"+stats[j]] == classCaps.get("Unpromoted")[j]){
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u>"+this["current"+stats[j]]+"</u>";
+					}
+					else {
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = this["current"+stats[j]];
+					}
+				}
+				if (stat == 1){
+					if (this["current"+stats[j]] + 1 == classCaps.get("Unpromoted")[j]){
+						this["current"+stats[j]] += 1;
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u><b>"+this["current"+stats[j]]+"</b></u>";
+					}
+					else if (this["current"+stats[j]] == classCaps.get("Unpromoted")[j]){
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u>"+this["current"+stats[j]]+"</u>";
+					}
+					else {
+						this["current"+stats[j]] += 1;
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<b>"+this["current"+stats[j]]+"</b>";
+					}
+				}
+				if (stat > 1){
+					if (this["current"+stats[j]] + 1 == classCaps.get("Unpromoted")[j]){
+						this["current"+stats[j]] += 1;
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u><b>"+this["current"+stats[j]]+"</b></u>";
+					}
+					else if (this["current"+stats[j]] == classCaps.get("Unpromoted")[j]){
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u>"+this["current"+stats[j]]+"</u>";
+					}
+					else if (this["current"+stats[j]] + stat >= classCaps.get("Unpromoted")[j]){
+						this["current"+stats[j]] = classCaps.get("Unpromoted")[j];
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u><i><b>"+this["current"+stats[j]]+"</b></i></u>";
+					}
+					else {
+						this["current"+stats[j]] += stat;
+						this["level"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<i><b>"+this["current"+stats[j]]+"</b></i>";
+					}
+				}
+			}
+		}
+		row = fixedGrowths.insertRow(fixedGrowths.rows.length - 1);
+		let level = row.insertCell(0);
+		let hp = row.insertCell(1);
+		let atk = row.insertCell(2);
+		let skl = row.insertCell(3);
+		let spd = row.insertCell(4);
+		let lck = row.insertCell(5);
+		let def = row.insertCell(6);
+		let res = row.insertCell(7);
+		let con = row.insertCell(8);
+		let mov = row.insertCell(9);
+		level.innerHTML = "<b>Promotion</b>";
+		let promotion = promoClassFixed.value + " (" + genders.get(char)+")";
+		if(promotions.get(char) != "T"){
+			promotion = baseClasses.get(char) + " → " + promotion;
+		}
+		currentHP += promotionGains.get(promotion)[0];
+		currentATK += promotionGains.get(promotion)[1];
+		currentSKL += promotionGains.get(promotion)[2];
+		currentSPD += promotionGains.get(promotion)[3];
+		currentLCK += promotionGains.get(promotion)[4];
+		currentDEF += promotionGains.get(promotion)[5];
+		currentRES += promotionGains.get(promotion)[6];
+		currentCON += promotionGains.get(promotion)[7];
+		currentMOV += promotionGains.get(promotion)[8];
+		hp.innerHTML = "<u>"+currentHP+"</u>";
+		atk.innerHTML = "<u>"+currentATK+"</u>";
+		skl.innerHTML = "<u>"+currentSKL+"</u>";
+		spd.innerHTML = "<u>"+currentSPD+"</u>";
+		lck.innerHTML = "<u>"+currentLCK+"</u>";
+		def.innerHTML = "<u>"+currentDEF+"</u>";
+		res.innerHTML = "<u>"+currentRES+"</u>";
+		con.innerHTML = "<u>"+currentCON+"</u>";
+		mov.innerHTML = "<u>"+currentMOV+"</u>";
+	}
+	let baseLevel = 1;
+	if(promotions.get(char) == "P"){
+		baseLevel = charBases.get(char)[0];
+	}
+	for (let i = baseLevel-1; i < 19; i++){
+		row = fixedGrowths.insertRow(fixedGrowths.rows.length - 1);
+		let level = row.insertCell(0);
+		let hp = row.insertCell(1);
+		let atk = row.insertCell(2);
+		let skl = row.insertCell(3);
+		let spd = row.insertCell(4);
+		let lck = row.insertCell(5);
+		let def = row.insertCell(6);
+		let res = row.insertCell(7);
+		let con = row.insertCell(8);
+		let mov = row.insertCell(9);
+		level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
+		hp.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"HPgrowth\"></span>";
+		atk.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"ATKgrowth\"></span>";
+		skl.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SKLgrowth\"></span>";
+		spd.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SPDgrowth\"></span>";
+		lck.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"LCKgrowth\"></span>";
+		def.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"DEFgrowth\"></span>";
+		res.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"RESgrowth\"></span>";
+		con.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"CONgrowth\"></span>";
+		mov.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"MOVgrowth\"></span>";
+		let promotion = promoClassFixed.value + " (" + genders.get(char)+")";
+		if(promotions.get(char) == "T"){
+			promotion = promotion.split(" → ")[1];
+		}
+		for (let j = 0; j < 9; j++){
+			stat = Math.round((i+1) * charGrowths.get(char)[j] / 100) - Math.round(i * charGrowths.get(char)[j] / 100);
+			if (stat == 0){
+				if (this["current"+stats[j]] == classCaps.get(promotion)[j]){
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u>"+this["current"+stats[j]]+"</u>";
+				}
+				else {
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = this["current"+stats[j]];
+				}
+			}
+			if (stat == 1){
+				if (this["current"+stats[j]] + 1 == classCaps.get(promotion)[j]){
+					this["current"+stats[j]] += 1;
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u><b>"+this["current"+stats[j]]+"</b></u>";
+				}
+				else if (this["current"+stats[j]] == classCaps.get(promotion)[j]){
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u>"+this["current"+stats[j]]+"</u>";
+				}
+				else {
+					this["current"+stats[j]] += 1;
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<b>"+this["current"+stats[j]]+"</b>";
+				}
+			}
+			if (stat > 1){
+				if (this["current"+stats[j]] + 1 == classCaps.get(promotion)[j]){
+					this["current"+stats[j]] += 1;
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u><b>"+this["current"+stats[j]]+"</b></u>";
+				}
+				else if (this["current"+stats[j]] == classCaps.get(promotion)[j]){
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u>"+this["current"+stats[j]]+"</u>";
+				}
+				else if (this["current"+stats[j]] + stat >= classCaps.get(promotion)[j]){
+					this["current"+stats[j]] = classCaps.get("Unpromoted")[j];
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<u><i><b>"+this["current"+stats[j]]+"</b></i></u>";
+				}
+				else {
+					this["current"+stats[j]] += stat;
+					this["Plevel"+(i+2).toString()+stats[j]+"growth"].innerHTML = "<i><b>"+this["current"+stats[j]]+"</b></i>";
+				}
 			}
 		}
 	}
@@ -563,11 +1050,12 @@ updateHit();
 
 var playerLevel = document.getElementById("playerLevel");
 var enemyLevel = document.getElementById("enemyLevel");
+var playerType = document.getElementById("playerType");
+var enemyType = document.getElementById("enemyType");
 var killEXP = document.getElementById("killEXP");
+var chapterEXP = document.getElementById("chapterEXP");
 var bossEXP = document.getElementById("bossEXP");
-var thiefEXP = document.getElementById("thiefEXP");
-var expGrowth = document.getElementById("expGrowth");
-var difficulty = document.getElementById("difficulty");
+var silencerEXP = document.getElementById("silencerEXP");
 var exp = document.getElementById("exp");
 for (let i = 0; i < 40; i++){
 	playerLevel.options[i] = new Option(40-i);
@@ -575,21 +1063,42 @@ for (let i = 0; i < 40; i++){
 }
 playerLevel.selectedIndex = 20;
 enemyLevel.selectedIndex = 20;
+playerType.selectedIndex = 0;
+enemyType.selectedIndex = 0;
 killEXP.checked = true;
+chapterEXP.checked = false;
 bossEXP.checked = false;
-thiefEXP.checked = false;
-expGrowth.selectedIndex = 0;
-difficulty.selectedIndex = 2;
+silencerEXP.checked = false;
 updateEXP();
 
 var charAverage = document.getElementById("charAverage");
 var promoLevelAverage = document.getElementById("promoLevelAverage");
-var transformation = document.getElementById("transformation");
-transformation.selectedIndex = 0;
+var promoClassAverage = document.getElementById("promoClassAverage");
 for (let i = 0; i < characters.length; i++) {
-	charAverage.options[i] = new Option(characters[i]);
+	if (characters[i] == "LArachel"){
+		charAverage.options[i] = new Option("L'Arachel");
+	}
+	else {
+		charAverage.options[i] = new Option(characters[i]);
+	}
 }
-for (let i = 20; i >= 1; i--) {
+for (let i = 20; i >= 10; i--) {
 	promoLevelAverage.options[20-i] = new Option(i);
 }
-updateAverageTable();
+updateCharAverage();
+
+var charFixed = document.getElementById("charFixed");
+var promoLevelFixed = document.getElementById("promoLevelFixed");
+var promoClassFixed = document.getElementById("promoClassFixed");
+for (let i = 0; i < characters.length; i++) {
+	if (characters[i] == "LArachel"){
+		charFixed.options[i] = new Option("L'Arachel");
+	}
+	else {
+		charFixed.options[i] = new Option(characters[i]);
+	}
+}
+for (let i = 20; i >= 10; i--) {
+	promoLevelFixed.options[20-i] = new Option(i);
+}
+updateCharFixed();
