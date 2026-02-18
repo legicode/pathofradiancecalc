@@ -55,106 +55,6 @@ const charGrowths = new Map([
 	["Giffca", 		[160,75,  5, 70, 60, 40, 50, 30, 0, 0]]
 ]);
 
-const genders = new Map([
-	["Ike", 		"M"],
-	["Titania", 	"F"],
-	["Oscar", 		"M"],
-	["Boyd", 		"M"],
-	["Rhys", 		"M"],
-	["Shinon",		"M"],
-	["Gatrie", 		"M"],
-	["Soren", 		"M"],
-	["Mia", 		"F"],
-	["Ilyana", 		"F"],
-	["Mist", 		"F"],
-	["Rolf", 		"M"],
-	["Marcia", 		"F"],
-	["Lethe", 		"F"],
-	["Mordecai", 	"M"],
-	["Volke", 		"M"],
-	["Kieran", 		"M"],
-	["Brom", 		"M"],
-	["Nephenee", 	"F"],
-	["Zihark", 		"M"],
-	["Sothe", 		"M"],
-	["Jill", 		"F"],
-	["Astrid", 		"F"],
-	["Makalov", 	"M"],
-	["Tormod", 		"M"],
-	["Muarim", 		"M"],
-	["Stefan", 		"M"],
-	["Devdan", 		"M"],
-	["Tanith", 		"F"],
-	["Reyson", 		"M"],
-	["Janaff", 		"M"],
-	["Ulki", 		"M"],
-	["Calill", 		"F"],
-	["Tauroneo", 	"M"],
-	["Ranulf", 		"M"],
-	["Haar", 		"M"],
-	["Bastian", 	"M"],
-	["Lucia", 		"F"],
-	["Geoffrey", 	"M"],
-	["Largo", 		"M"],
-	["Elincia", 	"F"],
-	["Nasir", 		"M"],
-	["Ena", 		"F"],
-	["Tibarn", 		"M"],
-	["Naesala", 	"M"],
-	["Giffca", 		"M"]
-]);
-
-const promotions = new Map([
-	["Ike", 			"N"],
-	["Titania", 		"P"],
-	["Oscar", 			"N"],
-	["Boyd", 			"N"],
-	["Rhys", 			"N"],
-	["Shinon",			"P"],
-	["Gatrie", 			"N"],
-	["Soren", 			"N"],
-	["Mia", 			"N"],
-	["Ilyana", 			"N"],
-	["Mist", 			"N"],
-	["Rolf", 			"N"],
-	["Marcia", 			"N"],
-	["Lethe", 			"B"],
-	["Mordecai", 		"B"],
-	["Volke", 			"N"],
-	["Kieran", 			"N"],
-	["Brom", 			"N"],
-	["Nephenee", 		"N"],
-	["Zihark", 			"N"],
-	["Sothe (Base)", 	"P"],
-	["Sothe (Bl+Rand)", "P"],
-	["Sothe (Bl+Fix)", 	"P"],
-	["Jill", 			"N"],
-	["Astrid", 			"N"],
-	["Makalov", 		"N"],
-	["Tormod", 			"N"],
-	["Muarim", 			"B"],
-	["Stefan", 			"P"],
-	["Devdan", 			"P"],
-	["Tanith", 			"P"],
-	["Reyson", 			"B"],
-	["Janaff", 			"B"],
-	["Ulki", 			"B"],
-	["Calill", 			"P"],
-	["Tauroneo", 		"P"],
-	["Ranulf", 			"B"],
-	["Haar", 			"P"],
-	["Bastian", 		"P"],
-	["Lucia", 			"P"],
-	["Geoffrey", 		"P"],
-	["Largo", 			"P"],
-	["Elincia", 		"P"],
-	["Nasir", 			"B"],
-	["Ena", 			"B"],
-	["Tibarn", 			"B"],
-	["Naesala", 		"B"],
-	["Giffca", 			"B"]
-]);
-
 const charBases = new Map([
 	["Ike", 			[ 1, 19,  5,  1,  6,  7,  6,  5,  0,  9,  6]],
 	["Titania", 		[ 1, 33, 12,  4, 13, 14, 11, 11,  7,  8,  9]],
@@ -229,6 +129,29 @@ const unpromotedCaps = new Map([
 	["Tormod", 			[40, 10, 20, 20, 20, 40, 10, 20]]
 ]);
 
+const promotionGains = new Map([
+	["Ike", 			[4, 3, 2, 2, 2, 0, 3, 2, 1, 1]],
+	["Oscar", 			[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
+	["Boyd", 			[6, 2, 1, 2, 1, 0, 2, 2, 1, 1]],
+	["Rhys", 			[3, 1, 3, 2, 2, 0, 2, 3, 1, 1]],
+	["Gatrie", 			[3, 3, 2, 2, 2, 0, 1, 3, 1, 1]],
+	["Soren", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
+	["Mia", 			[4, 1, 2, 2, 2, 0, 2, 2, 1, 1]],
+	["Ilyana", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 2]],
+	["Mist", 			[3, 2, 4, 1, 3, 0, 3, 2, 3, 1]],
+	["Rolf", 			[3, 3, 2, 2, 2, 0, 2, 2, 1, 1]],
+	["Marcia", 			[4, 2, 2, 2, 1, 0, 2, 3, 1, 1]],
+	["Volke", 			[2, 2, 1, 3, 2, 0, 2, 2, 0, 1]],
+	["Kieran", 			[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
+	["Brom", 			[3, 3, 2, 2, 2, 0, 1, 3, 1, 1]],
+	["Nephenee", 		[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
+	["Zihark", 			[4, 1, 2, 2, 2, 0, 2, 2, 1, 1]],
+	["Jill", 			[5, 2, 1, 2, 2, 0, 2, 1, 1, 1]],
+	["Astrid",			[5, 2, 2, 2, 1, 0, 3, 2, 1, 1]],
+	["Makalov", 		[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
+	["Tormod", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
+]);
+
 const promotedCaps = new Map([
 	["Ike", 			[60, 26, 20, 27, 28, 40, 24, 22]],
 	["Titania", 		[60, 25, 20, 26, 27, 40, 27, 26]],
@@ -278,29 +201,6 @@ const promotedCaps = new Map([
 	["Tibarn", 			[75, 40, 20, 40, 39, 40, 35, 30]],
 	["Naesala", 		[70, 35, 25, 38, 40, 40, 30, 35]],
 	["Giffca", 			[80, 32, 20, 35, 33, 40, 35, 27]]
-]);
-
-const promotionGains = new Map([
-	["Ike", 			[4, 3, 2, 2, 2, 0, 3, 2, 1, 1]],
-	["Oscar", 			[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
-	["Boyd", 			[6, 2, 1, 2, 1, 0, 2, 2, 1, 1]],
-	["Rhys", 			[3, 1, 3, 2, 2, 0, 2, 3, 1, 1]],
-	["Gatrie", 			[3, 3, 2, 2, 2, 0, 1, 3, 1, 1]],
-	["Soren", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
-	["Mia", 			[4, 1, 2, 2, 2, 0, 2, 2, 1, 1]],
-	["Ilyana", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 2]],
-	["Mist", 			[3, 2, 4, 1, 3, 0, 3, 2, 3, 1]],
-	["Rolf", 			[3, 3, 2, 2, 2, 0, 2, 2, 1, 1]],
-	["Marcia", 			[4, 2, 2, 2, 1, 0, 2, 3, 1, 1]],
-	["Volke", 			[2, 2, 1, 3, 2, 0, 2, 2, 0, 1]],
-	["Kieran", 			[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
-	["Brom", 			[3, 3, 2, 2, 2, 0, 1, 3, 1, 1]],
-	["Nephenee", 		[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
-	["Zihark", 			[4, 1, 2, 2, 2, 0, 2, 2, 1, 1]],
-	["Jill", 			[5, 2, 1, 2, 2, 0, 2, 1, 1, 1]],
-	["Astrid",			[5, 2, 2, 2, 1, 0, 3, 2, 1, 1]],
-	["Makalov", 		[3, 2, 2, 2, 2, 0, 2, 3, 1, 1]],
-	["Tormod", 			[4, 2, 1, 2, 2, 0, 2, 2, 1, 1]],
 ]);
 
 const transformations = new Map([
@@ -357,7 +257,7 @@ function updateEXP(){
 
 function updateCharAverage(){
 	if (charAverage.value != "Ike"){
-		while(promoLevelAverage.options.length > 11){
+		while (promoLevelAverage.options.length > 11){
 			promoLevelAverage.remove(11);
 		}
 	}
@@ -367,7 +267,7 @@ function updateCharAverage(){
 		}
 	}
 	if (charAverage.value == "Reyson"){
-		if(transformation.options.length > 2){
+		if (transformation.options.length > 2){
 			transformation.remove(2);
 		}
 	}
@@ -411,10 +311,10 @@ function updateAverageTable(){
 	mov.innerHTML = "<span id=\"aBaseMOV\"></span>";
 	for (let i = 0; i < 10; i++){
 		let stat = charBases.get(char)[i+1];
-		if (promotions.get(char) == "B" && transformation.value == "Transformed"){
+		if (transformations.get(char) != undefined && transformation.value == "Transformed"){
 			stat += transformations.get(char)[i];
 		}
-		else if (promotions.get(char) == "B" && transformation.value == "Demi Band"){
+		else if (transformations.get(char) != undefined && transformation.value == "Demi Band"){
 			stat += Math.ceil(transformations.get(char)[i] / 2);
 		}
 		this["aBase"+(stats[i])].innerHTML = stat;
@@ -429,7 +329,7 @@ function updateAverageTable(){
 	currentRES = charBases.get(char)[8];
 	currentCON = charBases.get(char)[9];
 	currentMOV = charBases.get(char)[10];
-	if(promotions.get(char) == "N"){
+	if (unpromotedCaps.get(char) != undefined){
 		let baseLevel = charBases.get(char)[0];
 		for (let i = baseLevel-1; i < promoLevelAverage.value - 1; i++){
 			row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
@@ -503,7 +403,7 @@ function updateAverageTable(){
 		mov.innerHTML = "<b>"+Math.round(currentMOV * 100) / 100+"</b>";
 	}
 	let baseLevel = 1;
-	if(promotions.get(char) != "N"){
+	if (unpromotedCaps.get(char) != undefined){
 		baseLevel = charBases.get(char)[0];
 	}
 	for (let i = baseLevel-1; i < 19; i++){
@@ -537,10 +437,10 @@ function updateAverageTable(){
 				this["current"+stats[j]] = promotedCaps.get(char)[j];
 			}
 			let stat = this["current"+stats[j]];
-			if (promotions.get(char) == "B" && transformation.value == "Transformed"){
+			if (transformations.get(char) != undefined && transformation.value == "Transformed"){
 				stat += transformations.get(char)[j];
 			}
-			else if (promotions.get(char) == "B" && transformation.value == "Demi Band"){
+			else if (transformations.get(char) != undefined && transformation.value == "Demi Band"){
 				stat += Math.ceil(transformations.get(char)[j] / 2);
 			}
 			if (this["current"+stats[j]] == promotedCaps.get(char)[j]){
