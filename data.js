@@ -255,60 +255,46 @@ function updateEXP(){
 	exp.innerHTML = expGain + " EXP";
 }
 
-function updateCharAverage(){
-	if (charAverage.value != "Ike"){
-		while (promoLevelAverage.options.length > 11){
-			promoLevelAverage.remove(11);
+function updateCharacter(){
+	if (character.value != "Ike"){
+		while (promotionLevel.length > 11){
+			promotionLevel.remove(11);
 		}
 	}
 	else{
 		for (let i = 9; i >= 1; i--) {
-			promoLevelAverage.options[20-i] = new Option(i);
+			promotionLevel[20-i] = new Option(i);
 		}
 	}
-	if (charAverage.value == "Reyson"){
-		if (transformation.options.length > 2){
+	if (character.value == "Reyson"){
+		if (transformation.length > 2){
 			transformation.remove(2);
 		}
 	}
 	else{
-		transformation.options[2] = new Option("Demi Band");
+		transformation[2] = new Option("Demi Band");
 	}
-	updateAverageTable();
+	updateTable();
 }
 
-function updateAverageTable(){
-	char = charAverage.value;
-	if (char.includes("'")) {
-		char = char.replaceAll("'", "")
+function updateTable(){
+	char = character.value;
+	var growthsTable = document.getElementById("growthsTable");
+	while (growthsTable.rows.length > 2){
+		growthsTable.deleteRow(1);
 	}
-	var averageGrowths = document.getElementById("averageGrowths");
-	while (averageGrowths.rows.length > 2){
-		averageGrowths.deleteRow(1);
-	}
-	row = averageGrowths.insertRow(1);
-	level = row.insertCell(0);
-	hp = row.insertCell(1);
-	str = row.insertCell(2);
-	mag = row.insertCell(3);
-	skl = row.insertCell(4);
-	spd = row.insertCell(5);
-	lck = row.insertCell(6);
-	def = row.insertCell(7);
-	res = row.insertCell(8);
-	con = row.insertCell(9);
-	mov = row.insertCell(10);
-	level.innerHTML = "<b>Base stats</b>";
-	hp.innerHTML = "<span id=\"aBaseHP\"></span>";
-	str.innerHTML = "<span id=\"aBaseSTR\"></span>";
-	mag.innerHTML = "<span id=\"aBaseMAG\"></span>";
-	skl.innerHTML = "<span id=\"aBaseSKL\"></span>";
-	spd.innerHTML = "<span id=\"aBaseSPD\"></span>";
-	lck.innerHTML = "<span id=\"aBaseLCK\"></span>";
-	def.innerHTML = "<span id=\"aBaseDEF\"></span>";
-	res.innerHTML = "<span id=\"aBaseRES\"></span>";
-	con.innerHTML = "<span id=\"aBaseCON\"></span>";
-	mov.innerHTML = "<span id=\"aBaseMOV\"></span>";
+	row = growthsTable.insertRow(1);
+	level = row.insertCell(0).innerHTML = "<b>Base stats</b>";
+	hp = row.insertCell(1).innerHTML = "<span id=\"BaseHP\"></span>";
+	str = row.insertCell(2).innerHTML = "<span id=\"BaseSTR\"></span>";
+	mag = row.insertCell(3).innerHTML = "<span id=\"BaseMAG\"></span>";
+	skl = row.insertCell(4).innerHTML = "<span id=\"BaseSKL\"></span>";
+	spd = row.insertCell(5).innerHTML = "<span id=\"BaseSPD\"></span>";
+	lck = row.insertCell(6).innerHTML = "<span id=\"BaseLCK\"></span>";
+	def = row.insertCell(7).innerHTML = "<span id=\"BaseDEF\"></span>";
+	res = row.insertCell(8).innerHTML = "<span id=\"BaseRES\"></span>";
+	con = row.insertCell(9).innerHTML = "<span id=\"BaseCON\"></span>";
+	mov = row.insertCell(10).innerHTML = "<span id=\"BaseMOV\"></span>";
 	for (let i = 0; i < 10; i++){
 		let stat = charBases.get(char)[i+1];
 		if (transformations.get(char) != undefined && transformation.value == "Transformed"){
@@ -317,7 +303,7 @@ function updateAverageTable(){
 		else if (transformations.get(char) != undefined && transformation.value == "Demi Band"){
 			stat += Math.ceil(transformations.get(char)[i] / 2);
 		}
-		this["aBase"+(stats[i])].innerHTML = stat;
+		this["Base"+(stats[i])].innerHTML = stat;
 	}
 	currentHP = charBases.get(char)[1];
 	currentSTR = charBases.get(char)[2];
@@ -331,8 +317,8 @@ function updateAverageTable(){
 	currentMOV = charBases.get(char)[10];
 	if (unpromotedCaps.get(char) != undefined){
 		let baseLevel = charBases.get(char)[0];
-		for (let i = baseLevel-1; i < promoLevelAverage.value - 1; i++){
-			row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
+		for (let i = baseLevel-1; i < promotionLevel.value - 1; i++){
+			row = growthsTable.insertRow(growthsTable.rows.length - 1);
 			let level = row.insertCell(0);
 			let hp = row.insertCell(1);
 			let str = row.insertCell(2);
@@ -345,42 +331,29 @@ function updateAverageTable(){
 			let con = row.insertCell(9);
 			let mov = row.insertCell(10);
 			level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
-			hp.innerHTML = "<span id=\"level"+(i+2).toString()+"HPavg\"></span>";
-			str.innerHTML = "<span id=\"level"+(i+2).toString()+"STRavg\"></span>";
-			mag.innerHTML = "<span id=\"level"+(i+2).toString()+"MAGavg\"></span>";
-			skl.innerHTML = "<span id=\"level"+(i+2).toString()+"SKLavg\"></span>";
-			spd.innerHTML = "<span id=\"level"+(i+2).toString()+"SPDavg\"></span>";
-			lck.innerHTML = "<span id=\"level"+(i+2).toString()+"LCKavg\"></span>";
-			def.innerHTML = "<span id=\"level"+(i+2).toString()+"DEFavg\"></span>";
-			res.innerHTML = "<span id=\"level"+(i+2).toString()+"RESavg\"></span>";
-			con.innerHTML = "<span id=\"level"+(i+2).toString()+"CONavg\"></span>";
-			mov.innerHTML = "<span id=\"level"+(i+2).toString()+"MOVavg\"></span>";
+			hp.innerHTML = "<span id=\"level"+(i+2).toString()+"HP\"></span>";
+			str.innerHTML = "<span id=\"level"+(i+2).toString()+"STR\"></span>";
+			mag.innerHTML = "<span id=\"level"+(i+2).toString()+"MAG\"></span>";
+			skl.innerHTML = "<span id=\"level"+(i+2).toString()+"SKL\"></span>";
+			spd.innerHTML = "<span id=\"level"+(i+2).toString()+"SPD\"></span>";
+			lck.innerHTML = "<span id=\"level"+(i+2).toString()+"LCK\"></span>";
+			def.innerHTML = "<span id=\"level"+(i+2).toString()+"DEF\"></span>";
+			res.innerHTML = "<span id=\"level"+(i+2).toString()+"RES\"></span>";
+			con.innerHTML = "<span id=\"level"+(i+2).toString()+"CON\"></span>";
+			mov.innerHTML = "<span id=\"level"+(i+2).toString()+"MOV\"></span>";
 			for (let j = 0; j < 10; j++){
 				this["current"+stats[j]] += charGrowths.get(char)[j] / 100;
 				this["current"+stats[j]] = Math.round(this["current"+stats[j]] * 100) / 100;
 
 				if (this["current"+stats[j]] >= unpromotedCaps.get(char)[j]){
 					this["current"+stats[j]] = unpromotedCaps.get(char)[j];
-					this["level"+(i+2).toString()+stats[j]+"avg"].innerHTML = "<b>"+this["current"+stats[j]]+"</b>";
+					this["level"+(i+2).toString()+stats[j]].innerHTML = "<b>"+this["current"+stats[j]]+"</b>";
 				}
 				else{
-					this["level"+(i+2).toString()+stats[j]+"avg"].innerHTML = this["current"+stats[j]];
+					this["level"+(i+2).toString()+stats[j]].innerHTML = this["current"+stats[j]];
 				}
 			}
 		}
-		row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
-		let level = row.insertCell(0);
-		let hp = row.insertCell(1);
-		let str = row.insertCell(2);
-		let mag = row.insertCell(3);
-		let skl = row.insertCell(4);
-		let spd = row.insertCell(5);
-		let lck = row.insertCell(6);
-		let def = row.insertCell(7);
-		let res = row.insertCell(8);
-		let con = row.insertCell(9);
-		let mov = row.insertCell(10);
-		level.innerHTML = "<b>Promotion</b>";
 		currentHP += promotionGains.get(char)[0];
 		currentSTR += promotionGains.get(char)[1];
 		currentMAG += promotionGains.get(char)[2];
@@ -391,45 +364,36 @@ function updateAverageTable(){
 		currentRES += promotionGains.get(char)[7];
 		currentCON += promotionGains.get(char)[8];
 		currentMOV += promotionGains.get(char)[9];
-		hp.innerHTML = "<b>"+Math.round(currentHP * 100) / 100+"</b>";
-		str.innerHTML = "<b>"+Math.round(currentSTR * 100) / 100+"</b>";
-		mag.innerHTML = "<b>"+Math.round(currentMAG * 100) / 100+"</b>";
-		skl.innerHTML = "<b>"+Math.round(currentSKL * 100) / 100+"</b>";
-		spd.innerHTML = "<b>"+Math.round(currentSPD * 100) / 100+"</b>";
-		lck.innerHTML = "<b>"+Math.round(currentLCK * 100) / 100+"</b>";
-		def.innerHTML = "<b>"+Math.round(currentDEF * 100) / 100+"</b>";
-		res.innerHTML = "<b>"+Math.round(currentRES * 100) / 100+"</b>";
-		con.innerHTML = "<b>"+Math.round(currentCON * 100) / 100+"</b>";
-		mov.innerHTML = "<b>"+Math.round(currentMOV * 100) / 100+"</b>";
+		row = growthsTable.insertRow(growthsTable.rows.length - 1);
+		let level = row.insertCell(0).innerHTML = "<b>Promotion</b>";
+		let hp = row.insertCell(1).innerHTML = "<b>"+Math.round(currentHP * 100) / 100+"</b>";
+		let str = row.insertCell(2).innerHTML = "<b>"+Math.round(currentSTR * 100) / 100+"</b>";
+		let mag = row.insertCell(3).innerHTML = "<b>"+Math.round(currentMAG * 100) / 100+"</b>";
+		let skl = row.insertCell(4).innerHTML = "<b>"+Math.round(currentSKL * 100) / 100+"</b>";
+		let spd = row.insertCell(5).innerHTML = "<b>"+Math.round(currentSPD * 100) / 100+"</b>";
+		let lck = row.insertCell(6).innerHTML = "<b>"+Math.round(currentLCK * 100) / 100+"</b>";
+		let def = row.insertCell(7).innerHTML = "<b>"+Math.round(currentDEF * 100) / 100+"</b>";
+		let res = row.insertCell(8).innerHTML = "<b>"+Math.round(currentRES * 100) / 100+"</b>";
+		let con = row.insertCell(9).innerHTML = "<b>"+Math.round(currentCON * 100) / 100+"</b>";
+		let mov = row.insertCell(10).innerHTML = "<b>"+Math.round(currentMOV * 100) / 100+"</b>";
 	}
 	let baseLevel = 1;
 	if (unpromotedCaps.get(char) != undefined){
 		baseLevel = charBases.get(char)[0];
 	}
 	for (let i = baseLevel-1; i < 19; i++){
-		row = averageGrowths.insertRow(averageGrowths.rows.length - 1);
-		let level = row.insertCell(0);
-		let hp = row.insertCell(1);
-		let str = row.insertCell(2);
-		let mag = row.insertCell(3);
-		let skl = row.insertCell(4);
-		let spd = row.insertCell(5);
-		let lck = row.insertCell(6);
-		let def = row.insertCell(7);
-		let res = row.insertCell(8);
-		let con = row.insertCell(9);
-		let mov = row.insertCell(10);
-		level.innerHTML = (i+1).toString() + " → " + (i+2).toString();
-		hp.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"HPavg\"></span>";
-		str.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"STRavg\"></span>";
-		mag.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"MAGavg\"></span>";
-		skl.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SKLavg\"></span>";
-		spd.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SPDavg\"></span>";
-		lck.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"LCKavg\"></span>";
-		def.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"DEFavg\"></span>";
-		res.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"RESavg\"></span>";
-		con.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"CONavg\"></span>";
-		mov.innerHTML = "<span id=\"Plevel"+(i+2).toString()+"MOVavg\"></span>";
+		row = growthsTable.insertRow(growthsTable.rows.length - 1);
+		let level = row.insertCell(0).innerHTML = (i+1).toString() + " → " + (i+2).toString();
+		let hp = row.insertCell(1).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"HP\"></span>";
+		let str = row.insertCell(2).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"STR\"></span>";
+		let mag = row.insertCell(3).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"MAG\"></span>";
+		let skl = row.insertCell(4).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SKL\"></span>";
+		let spd = row.insertCell(5).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"SPD\"></span>";
+		let lck = row.insertCell(6).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"LCK\"></span>";
+		let def = row.insertCell(7).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"DEF\"></span>";
+		let res = row.insertCell(8).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"RES\"></span>";
+		let con = row.insertCell(9).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"CON\"></span>";
+		let mov = row.insertCell(10).innerHTML = "<span id=\"Plevel"+(i+2).toString()+"MOV\"></span>";
 		for (let j = 0; j < 10; j++){
 			this["current"+stats[j]] += charGrowths.get(char)[j] / 100;
 			this["current"+stats[j]] = Math.round(this["current"+stats[j]] * 100) / 100;
@@ -444,10 +408,10 @@ function updateAverageTable(){
 				stat += Math.ceil(transformations.get(char)[j] / 2);
 			}
 			if (this["current"+stats[j]] == promotedCaps.get(char)[j]){
-				this["Plevel"+(i+2).toString()+stats[j]+"avg"].innerHTML = "<b>"+stat+"</b>";
+				this["Plevel"+(i+2).toString()+stats[j]].innerHTML = "<b>"+stat+"</b>";
 			}
 			else{
-				this["Plevel"+(i+2).toString()+stats[j]+"avg"].innerHTML = stat;
+				this["Plevel"+(i+2).toString()+stats[j]].innerHTML = stat;
 			}
 		}
 	}
@@ -456,12 +420,12 @@ function updateAverageTable(){
 var displayedHit = document.getElementById("displayedHit");
 var trueHit = document.getElementById("trueHit");
 for (let i = 0; i <= 100; i++){
-	displayedHit.options[i] = new Option(100-i);
+	displayedHit[i] = new Option(100-i);
 }
 displayedHit.selectedIndex = 25;
 updateHit();
 
-var playerLevel = document.getElementById("playerLevel");
+var playerLevel = document.getElementById("playerLevel")
 var enemyLevel = document.getElementById("enemyLevel");
 var killEXP = document.getElementById("killEXP");
 var bossEXP = document.getElementById("bossEXP");
@@ -470,8 +434,8 @@ var expGrowth = document.getElementById("expGrowth");
 var difficulty = document.getElementById("difficulty");
 var exp = document.getElementById("exp");
 for (let i = 0; i < 40; i++){
-	playerLevel.options[i] = new Option(40-i);
-	enemyLevel.options[i] = new Option(40-i);
+	playerLevel[i] = new Option(40-i);
+	enemyLevel[i] = new Option(40-i);
 }
 playerLevel.selectedIndex = 20;
 enemyLevel.selectedIndex = 20;
@@ -482,14 +446,14 @@ expGrowth.selectedIndex = 0;
 difficulty.selectedIndex = 2;
 updateEXP();
 
-var charAverage = document.getElementById("charAverage");
-var promoLevelAverage = document.getElementById("promoLevelAverage");
+var character = document.getElementById("character");
+var promotionLevel = document.getElementById("promotionLevel");
 var transformation = document.getElementById("transformation");
 transformation.selectedIndex = 0;
 for (let i = 0; i < characters.length; i++) {
-	charAverage.options[i] = new Option(characters[i]);
+	character[i] = new Option(characters[i]);
 }
 for (let i = 20; i >= 1; i--) {
-	promoLevelAverage.options[20-i] = new Option(i);
+	promotionLevel[20-i] = new Option(i);
 }
-updateAverageTable();
+updateTable();
