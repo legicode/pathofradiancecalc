@@ -27,6 +27,7 @@ td.intro{
 	text-align: left;
 	font-size: 18px;
 	padding: 25px;
+	padding-top: 5px;
 	line-height: 27px;
 }
 td.calculator, td.table{
