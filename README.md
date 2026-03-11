@@ -1,2 +1,1 @@
-Average stats calculator for Fire Emblem: Path of Radiance.
-
+Average stats and EXP calculator for Fire Emblem: Path of Radiance.
