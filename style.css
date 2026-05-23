@@ -1,64 +1,85 @@
 body{
 	font-family: sans-serif;
 	font-size: 16px;
-	background-color: #A33329;
+	background-color: #7F614C;
 	color: black;
 }
 table{
 	border-collapse: collapse;
-	background-color: #F2DD79;
+	background-color: #E5DACE;
+	margin-left: auto; 
+	margin-right: auto;
 }
-td#header, td#subheader, td#footer, td#intro, td.calculator, td.table{
-	border: 12px solid #36407D;
-	border-left-width: 50px;
-	border-right-width: 50px;
+table#head, table#below{
+	width: 970px;
 }
-td#header, td#subheader, td#footer{
+table#characters{
+	width: 1900px;
+}
+td#header, td#intro, td.options, td#footer{
+	border: 12px solid #583D66;
+	border-left-width: 40px;
+	border-right-width: 40px;
+}
+td#header, td#footer{
 	padding: 8px;
 	line-height: 24px;
 }
 td#header{
 	border-top-width: 16px;
+	border-bottom-width: 12px;
 }
 td#footer{
+	border-top-width: 24px;
 	border-bottom-width: 16px;
 }
 td#intro{
 	text-align: left;
 	font-size: 18px;
+	line-height: 27px;
 	padding: 25px;
 	padding-top: 5px;
-	line-height: 27px;
+	border-bottom-width: 24px;
 }
-td.calculator, td.table{
+h3{
+	text-align: center;
+}
+td.options{
+	font-size: 18px;
+	padding-top: 16px;
+	padding-bottom: 16px;
+	line-height: 36px;
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+}
+td.calculator{
+	border: solid #583D66;
 	width: 800px;
-	padding-top: 5px;
-	padding-bottom: 20px;
-	line-height: 14px;
+	height: 270px;
+	vertical-align: top;
+	border-left-width: 40px;
+	border-right-width: 40px;
+	border-top-width: 30px;
+	border-bottom-width: 30px;
+	padding-top: 0px;
 }
 th, td{
 	border: 2px solid;
 	text-align: center;
-	height: 15px;
 	padding: 10px;
-	border-color: #6F5B00;
+	width: 41px;
+	border-color: #44354C;
 }
 th{
 	border-top: 4px solid;
 	border-bottom: 4px solid;
-	width: 42px;
-	border-color: #6F5B00;
+	border-color: #44354C;
+}
+th.classes{
+	width: 113px;
 }
 th.levels{
-	width: 92px;
-}
-th.conmov{
-	width: 32px;
-}
-table#main{
-	margin-left: auto; 
-	margin-right: auto;
-	padding: 10px;
+	width: 57px;
 }
 table.statstable{
 	margin-left: auto; 
