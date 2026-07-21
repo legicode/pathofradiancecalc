@@ -378,7 +378,7 @@ function updateTable(){
 		let mov = row.insertCell(10).innerHTML = "<b>"+Math.round(currentMOV * 100) / 100+"</b>";
 	}
 	let baseLevel = 1;
-	if (unpromotedCaps.get(char) != undefined){
+	if (unpromotedCaps.get(char) == undefined){
 		baseLevel = charBases.get(char)[0];
 	}
 	for (let i = baseLevel-1; i < 19; i++){
